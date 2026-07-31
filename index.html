@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Despensa</title>
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIkRlc3BlbnNhIiwgInNob3J0X25hbWUiOiAiRGVzcGVuc2EiLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgInN0YXJ0X3VybCI6ICIuIiwgImJhY2tncm91bmRfY29sb3IiOiAiI0Y1RjVGMyIsICJ0aGVtZV9jb2xvciI6ICIjMkU3RDYzIiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBSUFBQURkdnZ0UUFBQUVKVWxFUVZSNG5PM2RUWEtiV2hTRlVTbjF4cE1NS3BsR1hzUGo4S1E4SXFXQml4Q00rTnRJNHNCYWZaZDE0ZU5jcE1MeTlYYTdYUjd2eC8rL252QmI2UHA0ZTMvQ2I3aytMaURSN01mall0bytJTjNzMmVZbGJSYVFibXJacXFRTkFwSk9YWGxHVVVEU09ZWWtvMityZjFJOWg1R2N5alVUU0RwSHRXSVVMWjVBNmptd0ZTZDNXVURxT2J5bHAzanVGaWFkczVtNW5jMmFRT281b1prbmZUb2c5WnpXbkZNL0VaQjZUbTR5Z1BXZkE4RmxQQ0RqaDh0VUJuY0RVZyt0a1JpR0ExSVBQZmVTY0E5RVpDQWc0NGRCZzJIMEExSVBJNzdtWVFzajhrOUF4ZytUZXBHWVFFVCtCbVQ4TUZNM0ZST0lpSUNJZkFaay8yS1JOaGdUaUlpQWlGeHZ0MXYxL2VzNVgwUHhJS1VQL3NmYiszK3ZmZzNybGU2bTFhNmlhRWxWdDdCajFOTlZkRVgxSmxEUkF6MUhzN1JhbytqNi9mZlBWNytHQlE1Y1QxZWhoaXB0WVNlcDUxSnFwWlVDWW9mS0JGVG9vdHhFbGZYV3VBZWFQSnFGYmhxNkRyQ3VldS9DZXZaL2lFYzBMNzdLc0JsVVpnc2JWTHFlVnVsVkZBaW85QVVhMnYvYUN3UjBUK2tMdDZmdVdnb0h4QjZVdjRsdTNadjJkUy91RWt3Z0lnSWlJaUFpQWlJaUlDSUNJaUlnSWdJaUlpQWlBaUlpSUNJQ0lpSWdJZ0lpSWlBaUFpSnluQWZLUERqMkVpWVFFUUVSRVJBUkFSRVJFQkVCRVJFUUVRRVJFUkFSQVJFUkVCRUJFUkVRRVFFUkVSQVJBUkVSRUJFQkVSRVFrY0xQUk8vL081VFB3QVFpSWlBaUFpSWlJQ0lDSWlJZ0lnSWlVdmh6b0lQOU1YelJqN1ZNSUNJQ0lpSWdJZ0lpSWlBaUFpSlMrRzE4ai8rWitoSW1FQkVCRVJFUUVRRVJFUkFSQVJFUkVCRUJFUkVRRVFFUkVSQVJBUkVSRUJFQkVSRVFFUUVST2M0RFpSNGNld2tUaUlpQWlBaUlpSUNJQ0lpSWdJZ0lpSWlBaUFpSWlJQ0lDSWlJZ0lnSWlJaUFpQWlJaUlDSUNJaUlnSWdJaUlpQWlBaUlpSUNJQ0lpSWdJZ0lpSWlBaUFpSWlJQ0lDSWlJZ0lnSWlJaUFpQWlJaUlDSUNJaUlnSWdJaUVqaGdPNzluKytLNnE2bFFFQm4vdjdlL2ErOVFFQWo2bDY0WGFWWFVmNkx4cHVqdi84cmRWRHBkQnJYNzc5L3Z2bzF6SEtBWTcxVWlhdWl6QlpXNG1odXFNcDZ5d1RFUG4wcnREVlV1U2h6VlZiNjhmWmViQUpWT2JLSldtdXM5eTZzT2I2RkJ1ZDh0ZEpwRkp0QXJZckhlbHpSRlYxdnQ5dWw3S3R2bEo1R2RZOThjOWpyYldGZjFUMEhCMUIxQzJNblBnTXF2UXZ3Zkcwd0poQVJBUkg1RzVCZGpKbTZxWmhBUlA0SnlCQmlVaThTRTRoSVB5QkRpQkZmOHhpWVFCcGkwR0FZdGpBaXd3RVpRdlRjUytMdUJOSVFyWkVZeHJZd0RYR1p5c0E5RUpHSmdBeWhrNXNNWUhvQ2FlaTA1cHo2V1Z1WWhrNW81a24vZkNaNkpnK1Buc0dpZWJIc0p0b29PcnlscDNqeHV6QU5IZGlLazd0c0MrdXluUjNKNnJtdy9uTWdvK2d3a2xPNWZnSzFqS0s2OGltd1FVQU5HZFd5MVFheVdVQXRKZTNaNWpjZTJ3ZlVVdEorUE82RzlZRUJkWW5wK1o3ekx1Y1B5Nm9mbk1TMEYyY0FBQUFBU1VWT1JLNUNZSUk9IiwgInNpemVzIjogIjE5MngxOTIiLCAidHlwZSI6ICJpbWFnZS9wbmcifV19">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAEJUlEQVR4nO3dTXKbWhSFUSn1xpMMKplGXsPj8KQ8IqWBixCM+NtI4sBafZd14eNcpMLy9Xa7XR7vx/+/nvBb6Pp4e3/Cb7k+LiDR7MfjYto+IN3s2eYlbRaQbmrZqqQNApJOXXlGUUDSOYYko2+rf1I9h5GcyjUTSDpHtWIULZ5A6jmwFSd3WUDqObylp3juFiads5m5nc2aQOo5oZknfTog9ZzWnFM/EZB6Tm4ygPWfA8FlPCDjh8tUBncDUg+tkRiGA1IPPfeScA9EZCAg44dBg2H0A1IPI77mYQsj8k9Axg+TepGYQET+BmT8MFM3FROIiICIfAZk/2KRNhgTiIiAiFxvt1v1/es5X0PxIKUP/sfb+3+vfg3rle6m1a6iaElVt7Bj1NNVdEX1JlDRAz1Hs7Rao+j6/ffPV7+GBQ5cT1ehhiptYSep51JqpZUCYofKBFTootxElfXWuAeaPJqFbhq6DrCueu/CevZ/iEc0L77KsBlUZgsbVLqeVulVFAio9AUa2v/aCwR0T+kLt6fuWgoHxB6Uv4lu3Zv2dS/uEkwgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiJynAfKPDj2EiYQEQERERARAREREBEBEREQEQERERARAREREBEBEREQEQERERARAREREBEBEREQkcLPRO//O5TPwAQiIiAiAiIiICICIiIgIgIiUvhzoIP9MXzRj7VMICICIiIgIgIiIiAiAiJS+G18j/+Z+hImEBEBEREQEQERERARAREREBEBEREQEQERERARAREREBEBEREQEQEROc4DZR4cewkTiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiEjhgO79n++K6q6lQEBn/v7e/a+9QEAj6l64XaVXUf6Lxpujv/8rdVDpdBrX779/vvo1zHKAY71UiauizBZW4mhuqMp6ywTEPn0rtDVUuShzVVb68fZebAJVObKJWmus9y6sOb6FBud8tdJpFJtArYrHelzRFV1vt9ul7KtvlJ5GdY98c9jrbWFf1T0HB1B1C2MnPgMqvQvwfG0wJhARARH5G5BdjJm6qZhARP4JyBBiUi8SE4hIPyBDiBFf8xiYQBpi0GAYtjAiwwEZQvTcS+LuBNIQrZEYxrYwDXGZysA9EJGJgAyhk5sMYHoCaei05pz6WVuYhk5o5kn/fCZ6Jg+PnsGiebHsJtooOrylp3jxuzANHdiKk7tsC+uynR3J6rmw/nMgo+gwklO5fgK1jKK68imwQUANGdWy1QayWUAtJe3Z5jce2wfUUtJ+PO6G9YEBdYnp+Z7zLucPy6ofnMS0F2cAAAAASUVORK5CYII=">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAEJUlEQVR4nO3dTXKbWhSFUSn1xpMMKplGXsPj8KQ8IqWBixCM+NtI4sBafZd14eNcpMLy9Xa7XR7vx/+/nvBb6Pp4e3/Cb7k+LiDR7MfjYto+IN3s2eYlbRaQbmrZqqQNApJOXXlGUUDSOYYko2+rf1I9h5GcyjUTSDpHtWIULZ5A6jmwFSd3WUDqObylp3juFiads5m5nc2aQOo5oZknfTog9ZzWnFM/EZB6Tm4ygPWfA8FlPCDjh8tUBncDUg+tkRiGA1IPPfeScA9EZCAg44dBg2H0A1IPI77mYQsj8k9Axg+TepGYQET+BmT8MFM3FROIiICIfAZk/2KRNhgTiIiAiFxvt1v1/es5X0PxIKUP/sfb+3+vfg3rle6m1a6iaElVt7Bj1NNVdEX1JlDRAz1Hs7Rao+j6/ffPV7+GBQ5cT1ehhiptYSep51JqpZUCYofKBFTootxElfXWuAeaPJqFbhq6DrCueu/CevZ/iEc0L77KsBlUZgsbVLqeVulVFAio9AUa2v/aCwR0T+kLt6fuWgoHxB6Uv4lu3Zv2dS/uEkwgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiJynAfKPDj2EiYQEQERERARAREREBEBEREQEQERERARAREREBEBEREQEQERERARAREREBEBEREQkcLPRO//O5TPwAQiIiAiAiIiICICIiIgIgIiUvhzoIP9MXzRj7VMICICIiIgIgIiIiAiAiJS+G18j/+Z+hImEBEBEREQEQERERARAREREBEBEREQEQERERARAREREBEBEREQEQEROc4DZR4cewkTiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiIiAiAiIiICICIiIgIgIiEjhgO79n++K6q6lQEBn/v7e/a+9QEAj6l64XaVXUf6Lxpujv/8rdVDpdBrX779/vvo1zHKAY71UiauizBZW4mhuqMp6ywTEPn0rtDVUuShzVVb68fZebAJVObKJWmus9y6sOb6FBud8tdJpFJtArYrHelzRFV1vt9ul7KtvlJ5GdY98c9jrbWFf1T0HB1B1C2MnPgMqvQvwfG0wJhARARH5G5BdjJm6qZhARP4JyBBiUi8SE4hIPyBDiBFf8xiYQBpi0GAYtjAiwwEZQvTcS+LuBNIQrZEYxrYwDXGZysA9EJGJgAyhk5sMYHoCaei05pz6WVuYhk5o5kn/fCZ6Jg+PnsGiebHsJtooOrylp3jxuzANHdiKk7tsC+uynR3J6rmw/nMgo+gwklO5fgK1jKK68imwQUANGdWy1QayWUAtJe3Z5jce2wfUUtJ+PO6G9YEBdYnp+Z7zLucPy6ofnMS0F2cAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#2E7D63">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Despensa">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  :root{
+    --bg:#F5F5F3;
+    --card:#FFFFFF;
+    --ink:#20241F;
+    --ink-dim:#6E7369;
+    --line:#E6E4DE;
+    --accent:#2E7D63;
+    --accent-dim:#DDEDE5;
+    --warn:#C9762A;
+    --warn-dim:#F7E7D6;
+    --danger:#C0392B;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    color:var(--ink);
+    display:flex; justify-content:center;
+  }
+  .app{ width:100%; max-width:480px; min-height:100vh; position:relative; padding-bottom:90px; }
+
+  /* top bar */
+  .topbar{ display:flex; align-items:center; gap:10px; padding:18px 16px 10px; }
+  .topbar button.back{
+    width:34px;height:34px; border-radius:50%; border:none; background:var(--card);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow:0 1px 3px rgba(0,0,0,0.08);
+  }
+  .topbar h2{ font-size:20px; margin:0; font-weight:700; }
+  .topbar .spacer{ flex:1; }
+
+  .view{ display:none; padding:0 16px; }
+  .view.active{ display:block; }
+
+  /* ---- HOME: dos mitades a pantalla completa ---- */
+  #view-home.active{
+    display:flex; flex-direction:column; position:absolute; inset:0; z-index:1; padding:0;
+  }
+  .half{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; cursor:pointer; position:relative; text-align:center; padding:20px;
+  }
+  .half:active{ filter:brightness(0.96); }
+  .half.cocinar{ background:#D8F0E2; color:#1E5C41; }
+  .half.inventario{ background:#DCE9F8; color:#1E4E7C; }
+  .half.carrito{ background:#FBE1D3; color:#8A4A24; }
+  .half .brand{
+    position:absolute; top:20px; left:22px; font-size:14px; font-weight:800; letter-spacing:.01em;
+    color:inherit; opacity:.75;
+  }
+  .half .half-icon{ margin-bottom:4px; }
+  .half .half-label{ font-size:26px; font-weight:800; }
+  .half .half-sub{ font-size:13px; opacity:.7; font-weight:500; }
+
+  /* ---- COCINAR: 3 zonas a pantalla completa ---- */
+  #view-cocinar.active{
+    display:flex; flex-direction:column; position:absolute; inset:0; z-index:1; padding:0;
+  }
+  .floating-back{
+    position:absolute; top:14px; left:14px; z-index:20;
+    width:34px;height:34px; border-radius:50%; border:none; background:rgba(255,255,255,0.85);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow:0 1px 4px rgba(0,0,0,0.15); color:var(--ink);
+  }
+  #cocinarZones{ flex:1; display:flex; flex-direction:column; min-height:0; }
+  .cook-zone{
+    flex:1; min-height:0; display:flex; flex-direction:column;
+    border-bottom:1px solid rgba(0,0,0,0.07);
+  }
+  .cook-zone:last-child{ border-bottom:none; }
+  .cook-zone .zone-header{
+    display:flex; align-items:center; gap:8px; padding:14px 16px 4px; flex-shrink:0;
+  }
+  .cook-zone .zone-header .zlabel{ font-size:15px; font-weight:800; }
+  .cook-zone .zone-header .zcount{
+    margin-left:auto; font-size:11.5px; font-weight:700; opacity:.65;
+    background:rgba(255,255,255,0.55); padding:2px 8px; border-radius:20px;
+  }
+  .zone-scroll{ flex:1; overflow-y:auto; padding:6px 16px 14px; -webkit-overflow-scrolling:touch; }
+  .cook-zone .add-inline{ border-color:rgba(0,0,0,0.2); color:rgba(0,0,0,0.6); background:rgba(255,255,255,0.35); }
+  .cook-zone .empty-mini{ color:rgba(0,0,0,0.5); }
+
+  /* ---- SECTION GROUPS (shared style: inventario zones) ---- */
+  .zone{ margin-bottom:26px; }
+  .zone-title{
+    display:flex; align-items:center; gap:8px; margin-bottom:10px;
+  }
+  .zone-title .icon{
+    width:28px;height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .zone-title h3{ font-size:15px; margin:0; font-weight:700; }
+  .zone-title .count{
+    margin-left:auto; font-size:11.5px; color:var(--ink-dim); background:var(--card);
+    padding:2px 8px; border-radius:20px; border:1px solid var(--line);
+  }
+
+  /* inventory item row */
+  .item{
+    display:flex; align-items:center; gap:10px; background:var(--card); border-radius:12px;
+    padding:10px 10px 10px 12px; margin-bottom:8px; border:1px solid var(--line);
+  }
+  .item.low-stock{ border-color:var(--warn); background:var(--warn-dim); }
+  .item-info{ flex:1; min-width:0; }
+  .item-name{ font-weight:600; font-size:14.5px; }
+  .item-meta{ font-size:11.5px; color:var(--ink-dim); margin-top:1px; }
+  .item-meta.low{ color:var(--warn); font-weight:700; }
+  .stepper{ display:flex; align-items:center; gap:4px; background:var(--bg); border-radius:8px; padding:3px; }
+  .stepper button{ width:26px;height:26px; border:none; background:transparent; font-size:16px; font-weight:700; color:var(--ink); cursor:pointer; border-radius:6px; }
+  .stepper button:active{ background:var(--line); }
+  .stepper span{ font-size:12.5px; min-width:34px; text-align:center; font-weight:600; }
+  .icon-btn{ border:none; background:transparent; cursor:pointer; padding:5px; color:#B7ADA0; display:flex; }
+  .icon-btn:active{ color:var(--danger); }
+
+  .cart-item{
+    display:flex; align-items:center; gap:10px; background:var(--card); border-radius:12px;
+    padding:12px; margin-bottom:8px; border:1px solid var(--line);
+  }
+  .cart-item .check{
+    width:22px;height:22px; border-radius:50%; border:2px solid var(--line); flex-shrink:0; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cart-item .name{ flex:1; font-weight:600; font-size:14.5px; }
+  .cart-item .auto-tag{
+    font-size:10.5px; font-weight:700; color:var(--warn); background:var(--warn-dim);
+    padding:2px 7px; border-radius:20px; flex-shrink:0;
+  }
+
+  .add-inline{
+    width:100%; padding:11px; border:1.5px dashed var(--line); border-radius:12px;
+    background:transparent; color:var(--ink-dim); font-weight:600; font-size:13.5px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .add-inline:active{ background:var(--card); }
+
+  .empty-mini{ font-size:12.5px; color:var(--ink-dim); padding:10px 2px; }
+
+  /* dish cards */
+  .dish{
+    background:var(--card); border-radius:14px; padding:14px; margin-bottom:10px; border:1px solid var(--line);
+  }
+  .dish-top{ display:flex; align-items:flex-start; gap:10px; }
+  .dish-name{ font-weight:700; font-size:15px; flex:1; }
+  .dish-ing{ font-size:12px; color:var(--ink-dim); margin-top:3px; line-height:1.4; }
+  .badge{
+    font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; flex-shrink:0;
+  }
+  .badge.ok{ background:var(--accent-dim); color:var(--accent); }
+  .badge.no{ background:var(--warn-dim); color:var(--warn); }
+  .dish-actions{ display:flex; gap:8px; margin-top:12px; }
+  .btn{
+    flex:1; padding:9px; border-radius:9px; border:none; font-weight:700; font-size:13px; cursor:pointer;
+  }
+  .btn.cook{ background:var(--accent); color:#fff; }
+  .btn.cook.warn{ background:var(--warn); }
+  .btn.cook:active{ opacity:.85; }
+  .btn.del{ flex:0 0 auto; padding:9px 12px; background:transparent; color:#B7ADA0; }
+
+  /* FAB */
+  .fab{
+    position:fixed; bottom:24px; right:calc(50% - 240px + 20px);
+    width:58px;height:58px; border-radius:50%; background:var(--accent); color:#fff;
+    border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow:0 6px 16px rgba(46,125,99,0.4); z-index:40;
+  }
+  @media (max-width:480px){ .fab{ right:20px; } }
+  .fab:active{ transform:scale(0.94); }
+
+  /* modal */
+  .overlay{
+    position:fixed; inset:0; background:rgba(20,20,18,0.5); z-index:60; display:none;
+    align-items:flex-end; justify-content:center;
+  }
+  .overlay.open{ display:flex; }
+  .modal{
+    background:#fff; width:100%; max-width:480px; border-radius:20px 20px 0 0;
+    padding:20px 18px 26px; max-height:88vh; overflow-y:auto;
+  }
+  .modal h3{ margin:0 0 4px; font-size:18px; font-weight:800; }
+  .modal p.hint{ font-size:12.5px; color:var(--ink-dim); margin:0 0 16px; }
+  .modal label.field-label{ font-size:12px; font-weight:700; color:var(--ink-dim); display:block; margin:14px 0 6px; }
+  .modal input[type=text], .modal select, .modal textarea{
+    width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:14px;
+    background:var(--bg); font-family:inherit;
+  }
+  .modal textarea{ min-height:90px; resize:vertical; }
+  .ing-row{ display:flex; gap:6px; margin-bottom:6px; align-items:center; }
+  .ing-row input[type=text]{ flex:1; }
+  .ing-row input[type=number]{ width:60px; padding:10px 6px; border-radius:10px; border:1px solid var(--line); background:var(--bg); font-size:13px; }
+  .ing-row input[name=unit]{ width:60px; padding:10px 6px; }
+  .ing-row .rm{ border:none; background:transparent; color:#B7ADA0; padding:4px; cursor:pointer; }
+  .add-ing-btn{
+    background:transparent; border:1.5px dashed var(--line); border-radius:10px; padding:8px; width:100%;
+    color:var(--ink-dim); font-size:13px; font-weight:600; cursor:pointer; margin-top:2px;
+  }
+  .filebtn{
+    display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:12px; margin-top:10px;
+    border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--ink); font-weight:600; font-size:13.5px; cursor:pointer;
+  }
+  .filebtn input{ display:none; }
+  .filename{ font-size:12px; color:var(--accent); margin-top:6px; }
+  .review-row{
+    display:flex; align-items:center; gap:8px; background:var(--bg); border-radius:8px;
+    padding:8px 10px; margin-bottom:6px;
+  }
+  .review-row input[type=checkbox]{ width:17px; height:17px; accent-color:var(--accent); flex-shrink:0; }
+  .review-row .rname{ flex:1; font-size:13.5px; font-weight:600; min-width:0; }
+  .review-row input[type=number]{
+    width:46px; border:1px solid var(--line); border-radius:6px; padding:4px; font-size:12.5px; text-align:center;
+  }
+  .review-row .rcat{ font-size:10.5px; color:var(--ink-dim); background:var(--card); padding:2px 6px; border-radius:10px; }
+  .divider-or{ text-align:center; font-size:11.5px; color:var(--ink-dim); margin:10px 0; }
+  .modal .btn-save{
+    width:100%; padding:14px; border:none; border-radius:12px; background:var(--accent); color:#fff;
+    font-weight:800; font-size:15px; cursor:pointer; margin-top:16px;
+  }
+  .modal .btn-save:disabled{ opacity:.5; }
+  .modal .close-x{
+    position:absolute; top:16px; right:16px; border:none; background:var(--bg); width:30px;height:30px;
+    border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-dim);
+  }
+  .status-msg{ font-size:13px; text-align:center; margin-top:10px; color:var(--ink-dim); min-height:16px; }
+  .status-msg.error{ color:var(--danger); }
+
+  /* confirm modal (small centered) */
+  .confirm-overlay{
+    position:fixed; inset:0; background:rgba(20,20,18,0.55); z-index:70; display:none;
+    align-items:center; justify-content:center; padding:20px;
+  }
+  .confirm-overlay.open{ display:flex; }
+  .confirm-box{ background:#fff; border-radius:16px; padding:20px; max-width:340px; text-align:center; }
+  .confirm-box p{ font-size:14px; margin:0 0 16px; color:var(--ink); }
+  .confirm-actions{ display:flex; gap:8px; }
+  .confirm-actions button{ flex:1; padding:10px; border-radius:10px; border:none; font-weight:700; font-size:13.5px; cursor:pointer; }
+  .confirm-actions .yes{ background:var(--warn); color:#fff; }
+  .confirm-actions .no{ background:var(--bg); color:var(--ink); }
+
+  .toast{
+    position:fixed; bottom:96px; left:50%; transform:translateX(-50%);
+    background:var(--ink); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; font-weight:600;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+    z-index:80; max-width:88%; text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HOME -->
+  <div id="view-home" class="view active">
+    <div class="half cocinar" id="goCocinar">
+      <div class="brand">Despensa</div>
+      <svg class="half-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M2 12h20"/><path d="M12 4v2"/><path d="M8 4l.5 2"/><path d="M16 4l-.5 2"/></svg>
+      <div class="half-label">Cocinar</div>
+      <div class="half-sub" id="cocinarSub">0 platos guardados</div>
+    </div>
+    <div class="half inventario" id="goInventario">
+      <svg class="half-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="8" y1="7" x2="8" y2="9"/><line x1="8" y1="15" x2="8" y2="17"/></svg>
+      <div class="half-label">Inventario</div>
+      <div class="half-sub" id="inventarioSub">0 productos guardados</div>
+    </div>
+    <div class="half carrito" id="goCarrito">
+      <svg class="half-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 7H6"/></svg>
+      <div class="half-label">Carrito</div>
+      <div class="half-sub" id="carritoSub">0 cosas por comprar</div>
+    </div>
+  </div>
+
+  <!-- COCINAR -->
+  <div id="view-cocinar" class="view">
+    <button class="floating-back" data-go="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div id="cocinarZones"></div>
+  </div>
+
+  <!-- CARRITO -->
+  <div id="view-carrito" class="view">
+    <div class="topbar">
+      <button class="back" data-go="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <h2>Carrito de la compra</h2>
+    </div>
+    <div class="card" style="margin:0 16px 14px;">
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="cartInput" placeholder="Añadir algo a la lista…" style="flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:14px; background:var(--bg);">
+        <button id="cartAddBtn" style="padding:0 16px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-weight:800; font-size:20px; cursor:pointer;">+</button>
+      </div>
+    </div>
+    <div style="padding:0 16px;" id="cartList"></div>
+  </div>
+
+  <!-- INVENTARIO -->
+  <div id="view-inventario" class="view">
+    <div class="topbar">
+      <button class="back" data-go="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <h2>Inventario</h2>
+    </div>
+    <div id="inventarioZones"></div>
+  </div>
+
+  <!-- FAB: añadir ticket -->
+  <button class="fab" id="fabAdd">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <!-- MODAL: ticket -->
+  <div class="overlay" id="ticketOverlay">
+    <div class="modal">
+      <button class="close-x" data-close="ticketOverlay">✕</button>
+      <h3>Añadir ticket</h3>
+      <p class="hint">Pega el texto del email, o sube el PDF del ticket. De momento las fotos no están soportadas (lo añadimos más adelante si hace falta).</p>
+      <label class="field-label">Texto del ticket</label>
+      <textarea id="ticketText" placeholder="Pega aquí el texto del email o ticket…"></textarea>
+      <div class="divider-or">— o —</div>
+      <label class="filebtn">
+        <input type="file" id="ticketFile" accept="application/pdf">
+        📎&nbsp; Subir PDF del ticket
+      </label>
+      <div class="filename" id="ticketFileName"></div>
+      <button class="btn-save" id="analyzeBtn">Reconocer productos</button>
+      <div class="status-msg" id="ticketStatus"></div>
+
+      <div id="ticketReview" style="display:none; margin-top:14px;">
+        <label class="field-label">Productos reconocidos (ajusta cantidad o desmarca)</label>
+        <div id="ticketReviewList"></div>
+        <button class="btn-save" id="ticketConfirmBtn">Añadir al inventario</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: añadir plato -->
+  <div class="overlay" id="dishOverlay">
+    <div class="modal">
+      <button class="close-x" data-close="dishOverlay">✕</button>
+      <h3>Nuevo plato</h3>
+      <label class="field-label">Nombre del plato</label>
+      <input type="text" id="dishName" placeholder="Ej: Pasta con tomate">
+      <label class="field-label">Sección</label>
+      <select id="dishSection">
+        <option value="comida">Comida</option>
+        <option value="cena">Cena</option>
+        <option value="general">Platos generales</option>
+      </select>
+      <label class="field-label">Ingredientes necesarios</label>
+      <div id="ingRows"></div>
+      <button class="add-ing-btn" id="addIngRow">+ Añadir ingrediente</button>
+      <button class="btn-save" id="saveDishBtn">Guardar plato</button>
+      <div class="status-msg" id="dishStatus"></div>
+    </div>
+  </div>
+
+  <!-- confirm cocinar sin stock -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <p id="confirmText"></p>
+      <div class="confirm-actions">
+        <button class="no" id="confirmNo">Cancelar</button>
+        <button class="yes" id="confirmYes">Cocinar igual</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAhkbtFCQW9AsutWHnXpbn0vlGzbniXx14",
+  authDomain: "la-despensita.firebaseapp.com",
+  projectId: "la-despensita",
+  storageBucket: "la-despensita.firebasestorage.app",
+  messagingSenderId: "71351210588",
+  appId: "1:71351210588:web:b4675028d10b5cc67e4c99"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+const REF = {
+  inventory: doc(db, 'despensa', 'inventory'),
+  dishes: doc(db, 'despensa', 'dishes'),
+  cart: doc(db, 'despensa', 'cart'),
+  products: doc(db, 'despensa', 'products'),
+};
+
+const DEFAULT_CATALOG = {"aceite_de_girasol": {"name": "Aceite de girasol", "category": "despensa", "shelfLifeDays": 365, "aliases": ["aceite de girasol"]}, "aceituna_r/anchoa_p3": {"name": "Aceitunas rellenas de anchoa", "category": "despensa", "shelfLifeDays": 180, "aliases": ["aceituna r/anchoa p3"]}, "alubia_pinta": {"name": "Alubia pinta (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["alubia pinta"]}, "anchoas_a.girasol_p3": {"name": "Anchoas en aceite de girasol", "category": "despensa", "shelfLifeDays": 365, "aliases": ["anchoas a.girasol p3"]}, "aroma_de_vainilla": {"name": "Aroma de vainilla", "category": "despensa", "shelfLifeDays": 365, "aliases": ["aroma de vainilla"]}, "arroz_cocido": {"name": "Arroz cocido (bolsa)", "category": "despensa", "shelfLifeDays": 200, "aliases": ["arroz cocido"]}, "arroz_largo": {"name": "Arroz largo", "category": "despensa", "shelfLifeDays": 365, "aliases": ["arroz largo"]}, "atun_aceite_girasol": {"name": "Atún en aceite de girasol", "category": "despensa", "shelfLifeDays": 365, "aliases": ["atun aceite girasol"]}, "atun_claro_giras_pk6": {"name": "Atún claro en aceite (pack 6)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["atun claro giras pk6"]}, "atun_claro_natural": {"name": "Atún claro al natural", "category": "despensa", "shelfLifeDays": 365, "aliases": ["atun claro natural"]}, "bacon_ahumado": {"name": "Bacon ahumado", "category": "nevera", "shelfLifeDays": 7, "aliases": ["bacon ahumado natur.", "bacon cocido ahumado"]}, "bacon_lonchas": {"name": "Bacon en lonchas", "category": "nevera", "shelfLifeDays": 7, "aliases": ["cintas de bacon", "bacon lonchas"]}, "base_pizza_extrafina": {"name": "Base de pizza extrafina", "category": "congelador", "shelfLifeDays": 6, "aliases": ["base pizza extrafina"]}, "bento_grande": {"name": "Bento (comida preparada)", "category": "nevera", "shelfLifeDays": 3, "aliases": ["bento grande"]}, "bento_mix": {"name": "Bento mix (comida preparada)", "category": "nevera", "shelfLifeDays": 3, "aliases": ["bento mix"]}, "blanqueta_pollo": {"name": "Blanqueta de pollo (preparado)", "category": "nevera", "shelfLifeDays": 3, "aliases": ["blanqueta pollo"]}, "burger_cerdo": {"name": "Hamburguesa de cerdo", "category": "congelador", "shelfLifeDays": 4, "aliases": ["burger cerdo"]}, "burger_meat_cerdo": {"name": "Hamburguesa de cerdo", "category": "congelador", "shelfLifeDays": 4, "aliases": ["burger meat cerdo"]}, "burger_meat_mixta_1k": {"name": "Hamburguesa mixta", "category": "congelador", "shelfLifeDays": 4, "aliases": ["burger meat mixta 1k"]}, "burger_pollo": {"name": "Hamburguesa de pollo", "category": "congelador", "shelfLifeDays": 4, "aliases": ["burger pollo"]}, "caballa": {"name": "Caballa en conserva", "category": "despensa", "shelfLifeDays": 365, "aliases": ["caballa fte oliv bpk", "caballa oliv red sal"]}, "calabacin": {"name": "Calabacín", "category": "nevera", "shelfLifeDays": 7, "aliases": ["calabacin"]}, "calabacin_blanco": {"name": "Calabacín blanco", "category": "nevera", "shelfLifeDays": 7, "aliases": ["calabacin blanco"]}, "calabaza": {"name": "Calabaza", "category": "nevera", "shelfLifeDays": 21, "aliases": ["calabaza"]}, "caldo_de_cocido": {"name": "Caldo de cocido", "category": "despensa", "shelfLifeDays": 180, "aliases": ["caldo de cocido"]}, "camembert": {"name": "Queso Camembert", "category": "nevera", "shelfLifeDays": 20, "aliases": ["camembert"]}, "campesinos": {"name": "Panecillos campesinos", "category": "despensa", "shelfLifeDays": 4, "aliases": ["campesinos"]}, "canonigos": {"name": "Canónigos (lechuga)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["canonigos"]}, "cebolla_1kg": {"name": "Cebolla", "category": "despensa", "shelfLifeDays": 30, "aliases": ["cebolla 1kg"]}, "cebolla_caramelizada": {"name": "Cebolla caramelizada", "category": "nevera", "shelfLifeDays": 10, "aliases": ["cebolla caramelizada"]}, "cilantro": {"name": "Cilantro fresco", "category": "nevera", "shelfLifeDays": 7, "aliases": ["cilantro"]}, "clara_liquida_pasteu": {"name": "Clara de huevo líquida pasteurizada", "category": "nevera", "shelfLifeDays": 20, "aliases": ["clara liquida pasteu"]}, "contramuslo_deshuesa": {"name": "Contramuslo de pollo deshuesado", "category": "congelador", "shelfLifeDays": 3, "aliases": ["contramuslo deshuesa"]}, "couscous": {"name": "Cuscús", "category": "despensa", "shelfLifeDays": 365, "aliases": ["couscous"]}, "crema_calabacin": {"name": "Crema de calabacín (preparada)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["crema calabacin"]}, "crema_calabaza": {"name": "Crema de calabaza (preparada)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["crema calabaza"]}, "croissant": {"name": "Croissant", "category": "despensa", "shelfLifeDays": 4, "aliases": ["croissant"]}, "empanada_atun": {"name": "Empanada de atún", "category": "nevera", "shelfLifeDays": 4, "aliases": ["empanada atun"]}, "escalopines_de_lomo": {"name": "Escalopines de lomo", "category": "congelador", "shelfLifeDays": 3, "aliases": ["escalopines de lomo"]}, "fabada": {"name": "Fabada asturiana", "category": "despensa", "shelfLifeDays": 365, "aliases": ["fabada"]}, "filete_de_lomo": {"name": "Filete de lomo", "category": "congelador", "shelfLifeDays": 3, "aliases": ["filete de lomo"]}, "freson": {"name": "Fresón (fresas)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["freson"]}, "gallina_blanca_sopas": {"name": "Sopa Gallina Blanca", "category": "despensa", "shelfLifeDays": 365, "aliases": ["gallina blanca sopas"]}, "garbanzos": {"name": "Garbanzos (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["garbanzos"]}, "gazpacho_tradicional": {"name": "Gazpacho tradicional", "category": "nevera", "shelfLifeDays": 7, "aliases": ["gazpacho tradicional"]}, "gnocchi": {"name": "Gnocchi", "category": "despensa", "shelfLifeDays": 25, "aliases": ["gnocchi"]}, "gnocchi_de_patata": {"name": "Gnocchi de patata", "category": "despensa", "shelfLifeDays": 25, "aliases": ["gnocchi de patata"]}, "gofre_clasico": {"name": "Gofre clásico", "category": "nevera", "shelfLifeDays": 4, "aliases": ["gofre clasico"]}, "gouda": {"name": "Queso Gouda en lonchas", "category": "nevera", "shelfLifeDays": 20, "aliases": ["gouda lonchas", "queso gouda lonchas", "lonchas gouda tierno"]}, "guacamole_200_g": {"name": "Guacamole", "category": "nevera", "shelfLifeDays": 5, "aliases": ["guacamole 200 g"]}, "guindilla_picante": {"name": "Guindillas picantes (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["guindilla picante"]}, "guisante_fino": {"name": "Guisantes finos (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["guisante fino"]}, "huevos": {"name": "Huevos frescos", "category": "nevera", "shelfLifeDays": 21, "aliases": ["24 huevos frescos", "huevos gallinero24ml"]}, "hummus_clasico": {"name": "Hummus clásico", "category": "nevera", "shelfLifeDays": 6, "aliases": ["hummus clasico"]}, "jamoncitos_barbacoa": {"name": "Jamoncitos de pollo barbacoa", "category": "congelador", "shelfLifeDays": 3, "aliases": ["jamoncitos barbacoa"]}, "kiwi_verde_granel": {"name": "Kiwi", "category": "nevera", "shelfLifeDays": 10, "aliases": ["kiwi verde granel"]}, "lonchas_cheddar": {"name": "Queso cheddar en lonchas", "category": "nevera", "shelfLifeDays": 20, "aliases": ["lonchas cheddar"]}, "macarron_nª6": {"name": "Macarrones nº6", "category": "despensa", "shelfLifeDays": 365, "aliases": ["macarron nª6"]}, "maiz_dulce": {"name": "Maíz dulce (lata)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["maiz dulce"]}, "margarina_con_sal": {"name": "Margarina con sal", "category": "nevera", "shelfLifeDays": 60, "aliases": ["margarina con sal"]}, "medialunas_calabaza": {"name": "Medialunas de calabaza", "category": "despensa", "shelfLifeDays": 5, "aliases": ["medialunas calabaza"]}, "melocoton_en_mitades": {"name": "Melocotón en mitades (lata)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["melocoton en mitades"]}, "melocoton_s/az": {"name": "Melocotón sin azúcar (lata)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["melocoton s/az"]}, "menestra": {"name": "Menestra de verduras", "category": "congelador", "shelfLifeDays": 180, "aliases": ["menestra"]}, "mezcla_4_quesos": {"name": "Mezcla de 4 quesos rallados", "category": "nevera", "shelfLifeDays": 15, "aliases": ["mezcla 4 quesos"]}, "mini_tortillas_trigo": {"name": "Mini tortillas de trigo", "category": "despensa", "shelfLifeDays": 30, "aliases": ["mini tortillas trigo"]}, "mozzarella": {"name": "Mozzarella", "category": "nevera", "shelfLifeDays": 10, "aliases": ["mozzarella", "mozzarella bufala", "mozzarella fresca", "mozzarella rallado"]}, "nata": {"name": "Nata para cocinar", "category": "nevera", "shelfLifeDays": 12, "aliases": ["nata cocinar fresca", "nata montar", "nata para cocinar"]}, "noquis_de_patata": {"name": "Ñoquis de patata", "category": "despensa", "shelfLifeDays": 25, "aliases": ["noquis de patata"]}, "pan_blanco_familiar": {"name": "Pan blanco familiar", "category": "despensa", "shelfLifeDays": 5, "aliases": ["pan blanco familiar"]}, "pan_de_molde_blanco": {"name": "Pan de molde blanco", "category": "despensa", "shelfLifeDays": 7, "aliases": ["pan de molde blanco"]}, "pan_matalahuva_2%": {"name": "Panecillos de matalahúva", "category": "despensa", "shelfLifeDays": 5, "aliases": ["pan matalahuva 2%"]}, "pan_maxi_hamburguesa": {"name": "Pan de hamburguesa (maxi)", "category": "despensa", "shelfLifeDays": 5, "aliases": ["pan maxi hamburguesa"]}, "panes_burger_brioche": {"name": "Panes brioche para burger", "category": "despensa", "shelfLifeDays": 5, "aliases": ["panes burger brioche"]}, "panes_hot_dog": {"name": "Panes de hot dog", "category": "despensa", "shelfLifeDays": 5, "aliases": ["panes hot dog"]}, "papa_3kg": {"name": "Patatas (saco 3kg)", "category": "despensa", "shelfLifeDays": 30, "aliases": ["papa 3kg"]}, "papa_5kg": {"name": "Patatas (saco 5kg)", "category": "despensa", "shelfLifeDays": 30, "aliases": ["papa 5kg"]}, "parrillada_verdura_a": {"name": "Parrillada de verduras", "category": "congelador", "shelfLifeDays": 180, "aliases": ["parrillada verdura a"]}, "patata_3_kg": {"name": "Patatas (saco 3kg)", "category": "despensa", "shelfLifeDays": 30, "aliases": ["patata 3 kg"]}, "patata_waffle": {"name": "Patatas waffle (congeladas)", "category": "congelador", "shelfLifeDays": 270, "aliases": ["patata waffle"]}, "patatas_campestres": {"name": "Patatas campestres (congeladas)", "category": "congelador", "shelfLifeDays": 270, "aliases": ["patatas campestres"]}, "patatas_gajo": {"name": "Patatas gajo (congeladas)", "category": "congelador", "shelfLifeDays": 270, "aliases": ["patatas gajo"]}, "pech_empanada_s/g": {"name": "Pechuga empanada sin gluten", "category": "congelador", "shelfLifeDays": 4, "aliases": ["pech empanada s/g"]}, "pechuga_pollo": {"name": "Pechuga de pollo", "category": "congelador", "shelfLifeDays": 120, "aliases": ["pechuga", "pechuga pollo", "pechuga entera", "pechuga familiar"]}, "pepinillos_agridulc.": {"name": "Pepinillos agridulces (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["pepinillos agridulc."]}, "pimiento_amarillo": {"name": "Pimiento amarillo", "category": "nevera", "shelfLifeDays": 10, "aliases": []}, "pimiento_rojo": {"name": "Pimiento rojo", "category": "nevera", "shelfLifeDays": 10, "aliases": ["pimiento rojo"]}, "pimiento_verde": {"name": "Pimiento verde", "category": "nevera", "shelfLifeDays": 10, "aliases": ["pimiento verde"]}, "platano": {"name": "Plátano", "category": "despensa", "shelfLifeDays": 6, "aliases": ["platano"]}, "platano_granel": {"name": "Plátano", "category": "despensa", "shelfLifeDays": 6, "aliases": ["platano granel"]}, "poke_salmon": {"name": "Poke de salmón (preparado)", "category": "nevera", "shelfLifeDays": 2, "aliases": ["poke salmon"]}, "q._lonchas_cremoso": {"name": "Queso en lonchas cremoso", "category": "nevera", "shelfLifeDays": 20, "aliases": ["q. lonchas cremoso"]}, "q_semi_mezcla": {"name": "Queso semicurado mezcla", "category": "nevera", "shelfLifeDays": 20, "aliases": ["q semi mezcla"]}, "queso_cabra_medall.": {"name": "Queso de cabra en medallones", "category": "nevera", "shelfLifeDays": 15, "aliases": ["queso cabra medall."]}, "queso_cottage": {"name": "Queso cottage", "category": "nevera", "shelfLifeDays": 10, "aliases": ["queso cottage"]}, "queso_fresco_burgos": {"name": "Queso fresco de Burgos", "category": "nevera", "shelfLifeDays": 10, "aliases": ["queso fresco burgos"]}, "queso_semirojo": {"name": "Queso semicurado", "category": "nevera", "shelfLifeDays": 25, "aliases": ["queso semirojo"]}, "queso_untar_light": {"name": "Queso para untar light", "category": "nevera", "shelfLifeDays": 15, "aliases": ["queso untar light"]}, "rallado_grana_padano": {"name": "Queso Grana Padano rallado", "category": "nevera", "shelfLifeDays": 20, "aliases": ["rallado grana padano"]}, "ravioli_req.espinaca": {"name": "Ravioli de requesón y espinacas", "category": "nevera", "shelfLifeDays": 10, "aliases": ["ravioli req.espinaca"]}, "rulito_cabra": {"name": "Rulito de queso de cabra", "category": "nevera", "shelfLifeDays": 15, "aliases": ["rulito cabra"]}, "sal_fina": {"name": "Sal fina", "category": "despensa", "shelfLifeDays": 3650, "aliases": ["sal fina"]}, "salsa_barbacoa": {"name": "Salsa barbacoa", "category": "despensa", "shelfLifeDays": 180, "aliases": ["salsa barbacoa"]}, "salsa_mexicana": {"name": "Salsa mexicana", "category": "despensa", "shelfLifeDays": 180, "aliases": ["salsa mexicana"]}, "sazonador_fajita": {"name": "Sazonador para fajitas", "category": "despensa", "shelfLifeDays": 365, "aliases": ["sazonador fajita"]}, "solomillo_pollo_s/g": {"name": "Solomillos de pollo sin gluten", "category": "congelador", "shelfLifeDays": 3, "aliases": ["solomillo pollo s/g"]}, "solomillos_empanados": {"name": "Solomillos empanados", "category": "congelador", "shelfLifeDays": 4, "aliases": ["solomillos empanados"]}, "spaghetti_nº3": {"name": "Espaguetis nº3", "category": "despensa", "shelfLifeDays": 365, "aliases": ["spaghetti nº3"]}, "taco_de_bacon": {"name": "Tacos de bacon", "category": "nevera", "shelfLifeDays": 7, "aliases": ["taco de bacon"]}, "tacos_marinados": {"name": "Tacos de carne marinados", "category": "congelador", "shelfLifeDays": 3, "aliases": ["tacos marinados"]}, "tiras_pollo": {"name": "Tiras de pollo", "category": "congelador", "shelfLifeDays": 120, "aliases": ["tiras de pechuga", "tiras pollo"]}, "tom._receta_artesana": {"name": "Tomate frito receta artesana", "category": "despensa", "shelfLifeDays": 365, "aliases": ["tom. receta artesana"]}, "tomate_cherry_pera": {"name": "Tomate cherry pera", "category": "nevera", "shelfLifeDays": 7, "aliases": ["tomate cherry pera"]}, "tomate_frito": {"name": "Tomate frito", "category": "despensa", "shelfLifeDays": 365, "aliases": ["tomate frito"]}, "tomate_salsa": {"name": "Tomate para salsa", "category": "nevera", "shelfLifeDays": 7, "aliases": ["tomate salsa"]}, "tomate_salsa_1kg": {"name": "Tomate para salsa", "category": "nevera", "shelfLifeDays": 7, "aliases": ["tomate salsa 1kg"]}, "tortelloni_carne": {"name": "Tortelloni de carne", "category": "nevera", "shelfLifeDays": 10, "aliases": ["tortelloni carne"]}, "tortilla_avena_6_un": {"name": "Tortillas de avena (6 uds)", "category": "despensa", "shelfLifeDays": 20, "aliases": ["tortilla avena 6 un"]}, "tortillas_de_trigo": {"name": "Tortillas de trigo (wraps)", "category": "despensa", "shelfLifeDays": 20, "aliases": ["tortillas de trigo"]}, "tortillas_mexicanas": {"name": "Tortillas mexicanas (wraps)", "category": "despensa", "shelfLifeDays": 20, "aliases": ["tortillas mexicanas"]}, "wrapidos_texas": {"name": "Wrapidos Texas (wrap relleno)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["wrapidos texas"]}, "wraps_altos_proteina": {"name": "Wraps altos en proteína", "category": "despensa", "shelfLifeDays": 20, "aliases": ["wraps altos proteina"]}, "yak_bolsa_soja": {"name": "Soja texturizada Yak", "category": "despensa", "shelfLifeDays": 180, "aliases": ["yak bolsa soja"]}, "zanahoria_1kg": {"name": "Zanahoria", "category": "nevera", "shelfLifeDays": 21, "aliases": ["zanahoria 1kg"]}};
+
+/* ---------------- estado ---------------- */
+let inventory = [];
+let dishes = [];
+
+const INV_ZONES = {
+  nevera:     { label:'Nevera',     icon:`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/>`, color:'#2C5C99', bg:'#DCE7F5' },
+  congelador: { label:'Congelador', icon:`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="8" y1="6" x2="8" y2="9"/><line x1="12" y1="6" x2="12" y2="9"/><line x1="16" y1="6" x2="16" y2="9"/>`, color:'#3E7C99', bg:'#DCEEF5' },
+  despensa:   { label:'Despensa',   icon:`<rect x="3" y="6" width="18" height="14" rx="1"/><line x1="3" y1="11" x2="21" y2="11"/>`, color:'#A16A2A', bg:'#F3E7D4' },
+};
+const INV_ORDER = ['nevera','congelador','despensa'];
+
+const DISH_SECTIONS = {
+  comida:  { label:'Comida',          bg:'#FBF3D9', fg:'#8A6D1E' },
+  cena:    { label:'Cena',            bg:'#DEE6F7', fg:'#3B4A7A' },
+  general: { label:'Platos generales', bg:'#DFF3E6', fg:'#1E6B45' },
+};
+const DISH_ORDER = ['comida','cena','general'];
+
+/* ---------------- utilidades ---------------- */
+function normalize(s){
+  return (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+}
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function toast(msg, isError){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = isError ? 'var(--danger)' : 'var(--ink)';
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 2800);
+}
+function daysSince(iso){
+  return Math.floor((new Date() - new Date(iso)) / (1000*60*60*24));
+}
+
+/* ---------------- navegación ---------------- */
+function goTo(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  if (view === 'cocinar') renderCocinar();
+  if (view === 'inventario') renderInventario();
+  if (view === 'carrito') renderCarrito();
+  if (view === 'home') renderHome();
+}
+document.getElementById('goCocinar').onclick = ()=> goTo('cocinar');
+document.getElementById('goInventario').onclick = ()=> goTo('inventario');
+document.getElementById('goCarrito').onclick = ()=> goTo('carrito');
+document.querySelectorAll('[data-go]').forEach(b=> b.onclick = ()=> goTo(b.dataset.go));
+
+function renderHome(){
+  document.getElementById('cocinarSub').textContent = dishes.length + ' platos guardados';
+  document.getElementById('inventarioSub').textContent = inventory.length + ' productos guardados';
+  document.getElementById('carritoSub').textContent = cart.length + ' cosas por comprar';
+}
+
+/* ---------------- storage (Firebase Firestore) ---------------- */
+let cart = [];
+let catalog = {};
+
+function currentViewName(){
+  const active = document.querySelector('.view.active');
+  return active ? active.id.replace('view-', '') : 'home';
+}
+function rerenderCurrent(){
+  const v = currentViewName();
+  if (v === 'cocinar') renderCocinar();
+  if (v === 'inventario') renderInventario();
+  if (v === 'carrito') renderCarrito();
+  renderHome();
+}
+
+async function loadAll(){
+  onSnapshot(REF.inventory, (snap)=>{
+    inventory = (snap.exists() && snap.data().items) ? snap.data().items : [];
+    rerenderCurrent();
+  }, ()=> toast('No se pudo conectar con la base de datos.', true));
+
+  onSnapshot(REF.dishes, (snap)=>{
+    dishes = (snap.exists() && snap.data().items) ? snap.data().items : [];
+    rerenderCurrent();
+  });
+
+  onSnapshot(REF.cart, (snap)=>{
+    cart = (snap.exists() && snap.data().items) ? snap.data().items : [];
+    rerenderCurrent();
+  });
+
+  // catálogo de productos: si no existe todavía en Firestore, lo sembramos con el diccionario por defecto
+  try{
+    const prodSnap = await getDoc(REF.products);
+    if (prodSnap.exists() && prodSnap.data().catalog){
+      catalog = prodSnap.data().catalog;
+    } else {
+      catalog = DEFAULT_CATALOG;
+      await setDoc(REF.products, { catalog: DEFAULT_CATALOG });
+    }
+  }catch(e){
+    catalog = DEFAULT_CATALOG;
+  }
+  onSnapshot(REF.products, (snap)=>{
+    if (snap.exists() && snap.data().catalog) catalog = snap.data().catalog;
+  });
+
+  renderHome();
+}
+async function saveInventory(){
+  try{ await setDoc(REF.inventory, { items: inventory }); }
+  catch(e){ toast('No se pudo guardar el inventario.', true); }
+}
+async function saveDishes(){
+  try{ await setDoc(REF.dishes, { items: dishes }); }
+  catch(e){ toast('No se pudo guardar el plato.', true); }
+}
+async function saveCart(){
+  try{ await setDoc(REF.cart, { items: cart }); }
+  catch(e){ toast('No se pudo guardar el carrito.', true); }
+}
+async function saveCatalog(){
+  try{ await setDoc(REF.products, { catalog }); }
+  catch(e){ toast('No se pudo guardar el diccionario de productos.', true); }
+}
+function addToCart(name, auto){
+  const norm = normalize(name);
+  if (cart.some(c => normalize(c.name) === norm)) return;
+  cart.push({ id: 'cart_' + Date.now() + '_' + Math.random().toString(36).slice(2,6), name, auto: !!auto });
+  saveCart();
+}
+function removeFromCartByName(name){
+  const norm = normalize(name);
+  const before = cart.length;
+  cart = cart.filter(c => normalize(c.name) !== norm);
+  if (cart.length !== before) saveCart();
+}
+
+/* ---------------- INVENTARIO ---------------- */
+function renderInventario(){
+  const wrap = document.getElementById('inventarioZones');
+  wrap.innerHTML = '';
+  INV_ORDER.forEach(cat=>{
+    const meta = INV_ZONES[cat];
+    const items = inventory.filter(i=>i.category===cat);
+    const zone = document.createElement('div');
+    zone.className = 'zone';
+    zone.innerHTML = `
+      <div class="zone-title">
+        <div class="icon" style="background:${meta.bg};color:${meta.color}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${meta.icon}</svg>
+        </div>
+        <h3>${meta.label}</h3>
+        <span class="count">${items.length}</span>
+      </div>
+      <div class="items"></div>
+    `;
+    const itemsWrap = zone.querySelector('.items');
+    if (items.length === 0){
+      itemsWrap.innerHTML = `<div class="empty-mini">Sin productos todavía.</div>`;
+    }
+    items.forEach(item=>{
+      const row = document.createElement('div');
+      const minQty = item.minQty || 1;
+      const isLow = item.quantity <= minQty;
+      row.className = 'item' + (isLow ? ' low-stock' : '');
+      const elapsed = daysSince(item.addedDate);
+      const life = item.shelfLifeDays || 7;
+      const left = life - elapsed;
+      const metaTxt = left <= 0 ? 'consumir ya' : (left === 1 ? '1 día est.' : left + ' días est.');
+      row.innerHTML = `
+        <div class="item-info">
+          <div class="item-name">${escapeHtml(item.name)}</div>
+          <div class="item-meta${isLow ? ' low' : ''}">${isLow ? '⚠️ quedan pocas · ' : ''}${metaTxt}</div>
+        </div>
+        <div class="stepper">
+          <button data-act="dec">–</button>
+          <span>${item.quantity} ${escapeHtml(item.unit||'')}</span>
+          <button data-act="inc">+</button>
+        </div>
+        <button class="icon-btn" data-act="del">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      `;
+      row.querySelector('[data-act="inc"]').onclick = ()=>{ item.quantity++; saveInventory(); renderInventario(); };
+      row.querySelector('[data-act="dec"]').onclick = ()=>{
+        item.quantity--;
+        if (item.quantity <= 0){
+          inventory = inventory.filter(i=>i.id!==item.id);
+          addToCart(item.name, true);
+          toast('«' + item.name + '» se acabó — lo he puesto en el carrito');
+        }
+        saveInventory(); renderInventario(); renderHome();
+      };
+      row.querySelector('[data-act="del"]').onclick = ()=>{
+        inventory = inventory.filter(i=>i.id!==item.id);
+        saveInventory(); renderInventario(); renderHome();
+      };
+      itemsWrap.appendChild(row);
+    });
+    wrap.appendChild(zone);
+  });
+}
+
+/* ---------------- COCINAR ---------------- */
+function matchesForIngredient(name){
+  const n = normalize(name);
+  if (!n) return [];
+  return inventory.filter(it=>{
+    const itn = normalize(it.name);
+    return itn.includes(n) || n.includes(itn);
+  });
+}
+function availableQty(name){
+  return matchesForIngredient(name).reduce((sum,it)=> sum + Number(it.quantity||0), 0);
+}
+function computeTimes(dish){
+  if (!dish.ingredients || dish.ingredients.length === 0) return 0;
+  let times = Infinity;
+  dish.ingredients.forEach(ing=>{
+    const need = Number(ing.quantity) || 0;
+    if (need <= 0) return;
+    const avail = availableQty(ing.name);
+    times = Math.min(times, Math.floor(avail / need));
+  });
+  if (times === Infinity) times = 0;
+  return Math.max(0, times);
+}
+
+function renderCocinar(){
+  const wrap = document.getElementById('cocinarZones');
+  wrap.innerHTML = '';
+  DISH_ORDER.forEach(sec=>{
+    const meta = DISH_SECTIONS[sec];
+    const list = dishes.filter(d=>d.section===sec);
+    const zone = document.createElement('div');
+    zone.className = 'cook-zone';
+    zone.style.background = meta.bg;
+    zone.style.color = meta.fg;
+    zone.innerHTML = `
+      <div class="zone-header">
+        <span class="zlabel">${meta.label}</span>
+        <span class="zcount">${list.length}</span>
+      </div>
+      <div class="zone-scroll"></div>
+    `;
+    const dwrap = zone.querySelector('.zone-scroll');
+    if (list.length === 0){
+      dwrap.innerHTML = `<div class="empty-mini">Todavía no hay platos aquí.</div>`;
+    }
+    list.forEach(dish=>{
+      const times = computeTimes(dish);
+      const ingTxt = dish.ingredients.map(i=> `${escapeHtml(i.name)} ${i.quantity}${escapeHtml(i.unit||'')}`).join(' · ');
+      const card = document.createElement('div');
+      card.className = 'dish';
+      card.innerHTML = `
+        <div class="dish-top">
+          <div style="flex:1;">
+            <div class="dish-name">${escapeHtml(dish.name)}</div>
+            <div class="dish-ing">${ingTxt}</div>
+          </div>
+          <div class="badge ${times>0?'ok':'no'}">${times>0 ? 'Puedes: ' + times + 'x' : 'Sin stock'}</div>
+        </div>
+        <div class="dish-actions">
+          <button class="btn cook ${times>0?'':'warn'}" data-act="cook">Cocinar</button>
+          <button class="btn del" data-act="del">🗑</button>
+        </div>
+      `;
+      card.querySelector('[data-act="cook"]').onclick = ()=> tryCook(dish);
+      card.querySelector('[data-act="del"]').onclick = ()=>{
+        dishes = dishes.filter(d=>d.id!==dish.id);
+        saveDishes(); renderCocinar(); renderHome();
+      };
+      dwrap.appendChild(card);
+    });
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-inline';
+    addBtn.innerHTML = '+ &nbsp;Añadir plato';
+    addBtn.onclick = ()=> openDishModal(sec);
+    dwrap.appendChild(addBtn);
+    wrap.appendChild(zone);
+  });
+}
+
+function tryCook(dish){
+  const times = computeTimes(dish);
+  if (times > 0){ cookDish(dish); return; }
+  showConfirm(`No parece que tengas suficientes ingredientes para «${dish.name}». ¿Cocinar igualmente?`, ()=> cookDish(dish));
+}
+
+function cookDish(dish){
+  dish.ingredients.forEach(ing=>{
+    let need = Number(ing.quantity) || 0;
+    if (need <= 0) return;
+    const matches = matchesForIngredient(ing.name).sort((a,b)=> b.quantity - a.quantity);
+    for (const m of matches){
+      if (need <= 0) break;
+      if (m.quantity <= need){ need -= m.quantity; m.quantity = 0; }
+      else { m.quantity -= need; need = 0; }
+    }
+  });
+  const emptied = inventory.filter(it=> it.quantity <= 0);
+  emptied.forEach(it => addToCart(it.name, true));
+  inventory = inventory.filter(it=> it.quantity > 0);
+  saveInventory();
+  toast('«' + dish.name + '» cocinado. Inventario actualizado.' + (emptied.length ? ' Añadido al carrito lo que se acabó.' : ''));
+  renderCocinar();
+  renderHome();
+}
+
+/* ---- confirm modal genérico ---- */
+let confirmCallback = null;
+function showConfirm(text, onYes){
+  document.getElementById('confirmText').textContent = text;
+  confirmCallback = onYes;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+document.getElementById('confirmYes').onclick = ()=>{
+  document.getElementById('confirmOverlay').classList.remove('open');
+  if (confirmCallback) confirmCallback();
+  confirmCallback = null;
+};
+document.getElementById('confirmNo').onclick = ()=>{
+  document.getElementById('confirmOverlay').classList.remove('open');
+  confirmCallback = null;
+};
+
+/* ---------------- MODAL: nuevo plato ---------------- */
+function ingRowTemplate(){
+  return `
+    <div class="ing-row">
+      <input type="text" placeholder="Ingrediente" class="ing-name">
+      <input type="number" min="0" step="0.5" placeholder="Cant." class="ing-qty">
+      <input type="text" placeholder="ud/kg/g" class="ing-unit">
+      <button class="rm">✕</button>
+    </div>
+  `;
+}
+function openDishModal(section){
+  document.getElementById('dishName').value = '';
+  document.getElementById('dishSection').value = section || 'comida';
+  document.getElementById('dishStatus').textContent = '';
+  const rows = document.getElementById('ingRows');
+  rows.innerHTML = '';
+  rows.insertAdjacentHTML('beforeend', ingRowTemplate());
+  rows.insertAdjacentHTML('beforeend', ingRowTemplate());
+  bindIngRowRemovers();
+  document.getElementById('dishOverlay').classList.add('open');
+}
+function bindIngRowRemovers(){
+  document.querySelectorAll('#ingRows .rm').forEach(btn=>{
+    btn.onclick = ()=>{
+      const rows = document.querySelectorAll('#ingRows .ing-row');
+      if (rows.length > 1) btn.closest('.ing-row').remove();
+    };
+  });
+}
+document.getElementById('addIngRow').onclick = ()=>{
+  document.getElementById('ingRows').insertAdjacentHTML('beforeend', ingRowTemplate());
+  bindIngRowRemovers();
+};
+document.getElementById('saveDishBtn').onclick = ()=>{
+  const name = document.getElementById('dishName').value.trim();
+  const section = document.getElementById('dishSection').value;
+  const statusEl = document.getElementById('dishStatus');
+  if (!name){ statusEl.textContent = 'Ponle un nombre al plato.'; statusEl.classList.add('error'); return; }
+
+  const ingredients = [];
+  document.querySelectorAll('#ingRows .ing-row').forEach(row=>{
+    const iname = row.querySelector('.ing-name').value.trim();
+    const qty = Number(row.querySelector('.ing-qty').value) || 0;
+    const unit = row.querySelector('.ing-unit').value.trim();
+    if (iname && qty > 0) ingredients.push({ name: iname, quantity: qty, unit: unit || 'ud' });
+  });
+  if (ingredients.length === 0){ statusEl.textContent = 'Añade al menos un ingrediente con cantidad.'; statusEl.classList.add('error'); return; }
+
+  dishes.push({ id: 'dish_' + Date.now(), name, section, ingredients });
+  saveDishes();
+  document.getElementById('dishOverlay').classList.remove('open');
+  renderCocinar(); renderHome();
+  toast('Plato «' + name + '» añadido.');
+};
+
+/* ---------------- MODAL: ticket ---------------- */
+document.getElementById('fabAdd').onclick = ()=>{
+  document.getElementById('ticketText').value = '';
+  document.getElementById('ticketFile').value = '';
+  document.getElementById('ticketFileName').textContent = '';
+  document.getElementById('ticketStatus').textContent = '';
+  document.getElementById('ticketOverlay').classList.add('open');
+};
+document.getElementById('ticketFile').addEventListener('change', (e)=>{
+  const f = e.target.files[0];
+  document.getElementById('ticketFileName').textContent = f ? '✓ ' + f.name : '';
+});
+document.querySelectorAll('[data-close]').forEach(btn=>{
+  btn.onclick = ()=> document.getElementById(btn.dataset.close).classList.remove('open');
+});
+document.querySelectorAll('.overlay').forEach(ov=>{
+  ov.addEventListener('click', (e)=>{ if (e.target === ov) ov.classList.remove('open'); });
+});
+
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+async function extractPdfText(file){
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+  let text = '';
+  for (let p=1; p<=pdf.numPages; p++){
+    const page = await pdf.getPage(p);
+    const content = await page.getTextContent();
+    text += content.items.map(it=>it.str).join(' ') + '\n';
+  }
+  return text;
+}
+
+// Reconocimiento sin IA: busca los alias del catálogo dentro del texto normalizado del ticket
+function recognizeTicketText(rawText){
+  const normText = normalize(rawText);
+  const found = [];
+  Object.keys(catalog).forEach(slug=>{
+    const prod = catalog[slug];
+    let count = 0;
+    (prod.aliases || []).forEach(alias=>{
+      const a = normalize(alias);
+      if (!a) return;
+      let idx = 0;
+      while (true){
+        const pos = normText.indexOf(a, idx);
+        if (pos === -1) break;
+        count++;
+        idx = pos + a.length;
+      }
+    });
+    if (count > 0){
+      found.push({
+        slug, name: prod.name, category: prod.category,
+        shelfLifeDays: prod.shelfLifeDays, quantity: count, packSize: prod.packSize || null
+      });
+    }
+  });
+  return found;
+}
+
+let pendingTicketItems = [];
+
+document.getElementById('analyzeBtn').addEventListener('click', analyzeTicket);
+
+async function analyzeTicket(){
+  const text = document.getElementById('ticketText').value.trim();
+  const file = document.getElementById('ticketFile').files[0];
+  const statusEl = document.getElementById('ticketStatus');
+  statusEl.classList.remove('error');
+  document.getElementById('ticketReview').style.display = 'none';
+
+  if (!text && !file){
+    statusEl.textContent = 'Pega texto o sube un PDF primero.';
+    statusEl.classList.add('error');
+    return;
+  }
+
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true;
+  statusEl.textContent = 'Leyendo el ticket…';
+
+  try{
+    let fullText = text;
+    if (file){
+      const pdfText = await extractPdfText(file);
+      fullText = fullText ? (fullText + '\n' + pdfText) : pdfText;
+    }
+
+    const found = recognizeTicketText(fullText);
+    if (found.length === 0){
+      statusEl.textContent = 'No he reconocido ningún producto conocido en ese ticket.';
+      statusEl.classList.add('error');
+      btn.disabled = false;
+      return;
+    }
+
+    pendingTicketItems = found;
+    statusEl.textContent = found.length + ' productos reconocidos.';
+    renderTicketReview();
+  }catch(err){
+    statusEl.textContent = 'Hubo un problema leyendo el ticket. Inténtalo de nuevo.';
+    statusEl.classList.add('error');
+  }
+  btn.disabled = false;
+}
+
+function renderTicketReview(){
+  const wrap = document.getElementById('ticketReview');
+  const list = document.getElementById('ticketReviewList');
+  list.innerHTML = '';
+  pendingTicketItems.forEach((item, idx)=>{
+    const row = document.createElement('div');
+    row.className = 'review-row';
+    row.innerHTML = `
+      <input type="checkbox" checked class="rchk" data-idx="${idx}">
+      <div class="rname">${escapeHtml(item.name)}${item.packSize ? ' (pack de '+item.packSize+')' : ''}</div>
+      <span class="rcat">${item.category}</span>
+      <input type="number" min="1" value="${item.quantity}" class="rqty" data-idx="${idx}">
+    `;
+    row.querySelector('.rqty').oninput = (e)=>{ pendingTicketItems[idx].quantity = Number(e.target.value) || 1; };
+    list.appendChild(row);
+  });
+  wrap.style.display = 'block';
+}
+
+document.getElementById('ticketConfirmBtn').addEventListener('click', ()=>{
+  const checks = document.querySelectorAll('.rchk');
+  let added = 0;
+  checks.forEach(chk=>{
+    if (!chk.checked) return;
+    const item = pendingTicketItems[Number(chk.dataset.idx)];
+    const normalized = normalize(item.name);
+    const existing = inventory.find(i => normalize(i.name) === normalized && i.category === item.category);
+    if (existing){
+      existing.quantity += item.quantity;
+      existing.addedDate = new Date().toISOString();
+      existing.shelfLifeDays = item.shelfLifeDays;
+    } else {
+      inventory.push({
+        id: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+        name: item.name, quantity: item.quantity, unit: 'ud', category: item.category,
+        addedDate: new Date().toISOString(),
+        shelfLifeDays: item.shelfLifeDays
+      });
+    }
+    added++;
+    removeFromCartByName(item.name);
+  });
+
+  saveInventory();
+  document.getElementById('ticketOverlay').classList.remove('open');
+  document.getElementById('ticketReview').style.display = 'none';
+  document.getElementById('ticketText').value = '';
+  document.getElementById('ticketFile').value = '';
+  document.getElementById('ticketFileName').textContent = '';
+  document.getElementById('ticketStatus').textContent = '';
+  pendingTicketItems = [];
+  toast(added + ' productos añadidos al inventario');
+  renderHome();
+  if (document.getElementById('view-inventario').classList.contains('active')) renderInventario();
+  if (document.getElementById('view-cocinar').classList.contains('active')) renderCocinar();
+});
+
+/* ---------------- CARRITO ---------------- */
+function renderCarrito(){
+  const list = document.getElementById('cartList');
+  list.innerHTML = '';
+  if (cart.length === 0){
+    list.innerHTML = `<div class="empty-mini">Nada pendiente por ahora. Cuando algo se agote, aparecerá aquí solo.</div>`;
+    return;
+  }
+  cart.forEach(c=>{
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+    row.innerHTML = `
+      <div class="check"></div>
+      <div class="name">${escapeHtml(c.name)}</div>
+      ${c.auto ? '<span class="auto-tag">SIN STOCK</span>' : ''}
+      <button class="icon-btn" data-act="del">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      </button>
+    `;
+    const remove = ()=>{
+      cart = cart.filter(x=>x.id!==c.id);
+      saveCart(); renderCarrito(); renderHome();
+    };
+    row.querySelector('.check').onclick = remove;
+    row.querySelector('[data-act="del"]').onclick = remove;
+    list.appendChild(row);
+  });
+}
+function addManualCartItem(){
+  const input = document.getElementById('cartInput');
+  const name = input.value.trim();
+  if (!name) return;
+  addToCart(name, false);
+  input.value = '';
+  renderCarrito(); renderHome();
+}
+document.getElementById('cartAddBtn').onclick = addManualCartItem;
+document.getElementById('cartInput').addEventListener('keydown', (e)=>{
+  if (e.key === 'Enter') addManualCartItem();
+});
+
+/* ---------------- init ---------------- */
+loadAll();
+</script>
+</body>
+</html>
