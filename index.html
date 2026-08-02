@@ -12,7 +12,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="La Despensita">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
   :root{
     --bg:#F5F5F3;
@@ -250,6 +249,12 @@
     font-weight:800; font-size:15px; cursor:pointer; margin-top:16px;
   }
   .modal .btn-save:disabled{ opacity:.5; }
+  .modal .cat-pick{ width:auto; flex:1; margin-top:0; padding:16px 6px; font-size:14px; }
+  .product-pick-row{
+    padding:11px 10px; border-bottom:1px solid var(--line); font-size:14px; font-weight:600;
+    cursor:pointer; color:var(--ink);
+  }
+  .product-pick-row:active{ background:var(--bg); }
   .modal .close-x{
     position:absolute; top:16px; right:16px; border:none; background:var(--bg); width:30px;height:30px;
     border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-dim);
@@ -314,13 +319,41 @@
       <button class="back" data-go="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
       <h2>Carrito de la compra</h2>
     </div>
-    <div class="card" style="margin:0 16px 14px;">
-      <div style="display:flex; gap:8px;">
-        <input type="text" id="cartInput" placeholder="Añadir algo a la lista…" style="flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--line); font-size:14px; background:var(--bg);">
-        <button id="cartAddBtn" style="padding:0 16px; border:none; border-radius:10px; background:var(--accent); color:#fff; font-weight:800; font-size:20px; cursor:pointer;">+</button>
-      </div>
+    <div style="padding:0 16px 14px;">
+      <button class="add-inline" id="openCartAddBtn" style="border-color:var(--line); color:var(--ink-dim);">+ &nbsp;Añadir producto</button>
     </div>
     <div style="padding:0 16px;" id="cartList"></div>
+  </div>
+
+  <!-- MODAL: añadir al carrito (guiado) -->
+  <div class="overlay" id="cartAddOverlay">
+    <div class="modal">
+      <button class="close-x" data-close="cartAddOverlay">✕</button>
+      <h3>Añadir al carrito</h3>
+
+      <div id="cartAddStepCat">
+        <p class="hint">¿En qué sección está?</p>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-save cat-pick" data-cat="nevera" style="background:#DCE7F5; color:#2C5C99;">Nevera</button>
+          <button class="btn-save cat-pick" data-cat="congelador" style="background:#DCEEF5; color:#3E7C99;">Congelador</button>
+          <button class="btn-save cat-pick" data-cat="despensa" style="background:#F3E7D4; color:#A16A2A;">Despensa</button>
+        </div>
+      </div>
+
+      <div id="cartAddStepProduct" style="display:none;">
+        <p class="hint"><a href="#" id="backToCatStep" style="color:var(--accent); text-decoration:none;">‹ Cambiar sección</a></p>
+        <p class="field-label" id="cartAddCatLabel">Elige el producto</p>
+        <div id="cartAddProductList" style="max-height:340px; overflow-y:auto;"></div>
+      </div>
+
+      <div id="cartAddStepQty" style="display:none;">
+        <p class="hint"><a href="#" id="backToProductStep" style="color:var(--accent); text-decoration:none;">‹ Elegir otro producto</a></p>
+        <p class="field-label" id="cartAddSelectedName" style="font-size:16px; font-weight:800; color:var(--ink);"></p>
+        <label class="field-label">Cantidad</label>
+        <input type="number" id="cartAddQty" value="1" min="1">
+        <button class="btn-save" id="cartAddConfirmBtn">Añadir al carrito</button>
+      </div>
+    </div>
   </div>
 
   <!-- INVENTARIO -->
@@ -497,6 +530,7 @@ function goTo(view, fromPopstate, data){
   }
   if (view === 'carrito') renderCarrito();
   if (view === 'home') renderHome();
+  document.getElementById('fabAdd').style.display = (view === 'home') ? 'flex' : 'none';
   if (!fromPopstate){
     const state = { view };
     if (view === 'inv-detail') state.category = currentInvCategory;
@@ -589,10 +623,13 @@ async function saveCatalog(){
   try{ await setDoc(REF.products, { catalog }); }
   catch(e){ toast('No se pudo guardar el diccionario de productos.', true); }
 }
-function addToCart(name, auto){
+function addToCart(name, auto, quantity, category){
   const norm = normalize(name);
   if (cart.some(c => normalize(c.name) === norm)) return;
-  cart.push({ id: 'cart_' + Date.now() + '_' + Math.random().toString(36).slice(2,6), name, auto: !!auto });
+  cart.push({
+    id: 'cart_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+    name, auto: !!auto, quantity: quantity || 1, category: category || null
+  });
   saveCart();
 }
 function removeFromCartByName(name){
@@ -872,11 +909,25 @@ document.querySelectorAll('.overlay').forEach(ov=>{
   ov.addEventListener('click', (e)=>{ if (e.target === ov) ov.classList.remove('open'); });
 });
 
-if (window.pdfjsLib) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+let pdfJsLoadPromise = null;
+function loadPdfJs(){
+  if (window.pdfjsLib) return Promise.resolve();
+  if (pdfJsLoadPromise) return pdfJsLoadPromise;
+  pdfJsLoadPromise = new Promise((resolve, reject)=>{
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    script.onload = ()=>{
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      resolve();
+    };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+  return pdfJsLoadPromise;
 }
 
 async function extractPdfText(file){
+  await loadPdfJs();
   const buf = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({data: buf}).promise;
   let text = '';
@@ -1030,9 +1081,10 @@ function renderCarrito(){
   cart.forEach(c=>{
     const row = document.createElement('div');
     row.className = 'cart-item';
+    const qtyTxt = (c.quantity && c.quantity > 1) ? ` ×${c.quantity}` : '';
     row.innerHTML = `
       <div class="check"></div>
-      <div class="name">${escapeHtml(c.name)}</div>
+      <div class="name">${escapeHtml(c.name)}${qtyTxt}</div>
       ${c.auto ? '<span class="auto-tag">SIN STOCK</span>' : ''}
       <button class="icon-btn" data-act="del">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
@@ -1047,18 +1099,67 @@ function renderCarrito(){
     list.appendChild(row);
   });
 }
-function addManualCartItem(){
-  const input = document.getElementById('cartInput');
-  const name = input.value.trim();
-  if (!name) return;
-  addToCart(name, false);
-  input.value = '';
-  renderCarrito(); renderHome();
+
+/* ---- alta guiada al carrito: categoría → producto → cantidad ---- */
+let cartAddSelected = null;
+
+function openCartAddModal(){
+  document.getElementById('cartAddStepCat').style.display = 'block';
+  document.getElementById('cartAddStepProduct').style.display = 'none';
+  document.getElementById('cartAddStepQty').style.display = 'none';
+  cartAddSelected = null;
+  document.getElementById('cartAddOverlay').classList.add('open');
 }
-document.getElementById('cartAddBtn').onclick = addManualCartItem;
-document.getElementById('cartInput').addEventListener('keydown', (e)=>{
-  if (e.key === 'Enter') addManualCartItem();
+document.getElementById('openCartAddBtn').onclick = openCartAddModal;
+
+document.querySelectorAll('.cat-pick').forEach(btn=>{
+  btn.onclick = ()=>{
+    const cat = btn.dataset.cat;
+    const list = document.getElementById('cartAddProductList');
+    list.innerHTML = '';
+    const products = Object.values(catalog)
+      .filter(p => p.category === cat)
+      .sort((a,b)=> a.name.localeCompare(b.name, 'es'));
+    if (products.length === 0){
+      list.innerHTML = `<div class="empty-mini">No hay productos guardados en esta sección todavía.</div>`;
+    }
+    products.forEach(p=>{
+      const row = document.createElement('div');
+      row.className = 'product-pick-row';
+      row.textContent = p.name;
+      row.onclick = ()=>{
+        cartAddSelected = { name: p.name, category: cat };
+        document.getElementById('cartAddStepProduct').style.display = 'none';
+        document.getElementById('cartAddStepQty').style.display = 'block';
+        document.getElementById('cartAddSelectedName').textContent = p.name;
+        document.getElementById('cartAddQty').value = 1;
+      };
+      list.appendChild(row);
+    });
+    document.getElementById('cartAddCatLabel').textContent = 'Elige el producto (' + INV_ZONES[cat].label + ')';
+    document.getElementById('cartAddStepCat').style.display = 'none';
+    document.getElementById('cartAddStepProduct').style.display = 'block';
+  };
 });
+document.getElementById('backToCatStep').onclick = (e)=>{
+  e.preventDefault();
+  document.getElementById('cartAddStepProduct').style.display = 'none';
+  document.getElementById('cartAddStepCat').style.display = 'block';
+};
+document.getElementById('backToProductStep').onclick = (e)=>{
+  e.preventDefault();
+  document.getElementById('cartAddStepQty').style.display = 'none';
+  document.getElementById('cartAddStepProduct').style.display = 'block';
+};
+document.getElementById('cartAddConfirmBtn').onclick = ()=>{
+  if (!cartAddSelected) return;
+  const qty = Number(document.getElementById('cartAddQty').value) || 1;
+  addToCart(cartAddSelected.name, false, qty, cartAddSelected.category);
+  document.getElementById('cartAddOverlay').classList.remove('open');
+  renderCarrito(); renderHome();
+  toast('«' + cartAddSelected.name + '» añadido al carrito');
+  cartAddSelected = null;
+};
 
 /* ---------------- init ---------------- */
 loadAll();
