@@ -46,31 +46,37 @@
   .topbar .spacer{ flex:1; }
 
   .view{ display:none; padding:0 16px; }
-  .view.active{ display:block; }
+  .view.active{ display:block; animation: viewSlideIn 0.25s ease; }
+  @keyframes viewSlideIn{
+    from{ opacity:0; transform:translateX(18px); }
+    to{ opacity:1; transform:translateX(0); }
+  }
 
   /* ---- HOME: dos mitades a pantalla completa ---- */
   #view-home.active{
     display:flex; flex-direction:column; position:absolute; inset:0; z-index:1; padding:0;
+    border:12px solid #000; border-radius:22px; overflow:hidden;
   }
   .half{
-    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:6px; cursor:pointer; position:relative; text-align:center; padding:20px;
+    flex:1; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:3px; cursor:pointer; position:relative; text-align:center; padding:12px;
   }
   .half:active{ filter:brightness(0.96); }
-  .half.cocinar{ background:#D8F0E2; color:#1E5C41; }
-  .half.inventario{ background:#DCE9F8; color:#1E4E7C; }
-  .half.carrito{ background:#FBE1D3; color:#8A4A24; }
+  .half.cocinar{ background:#E4EEE8; color:#2F4A3B; }
+  .half.inventario{ background:#E2E7EF; color:#2C3C52; }
+  .half.carrito{ background:#EFE6DC; color:#69493A; }
   .half .brand{
-    position:absolute; top:20px; left:22px; right:22px; font-size:13px; font-weight:800; letter-spacing:.01em;
-    color:inherit; opacity:.75; line-height:1.3;
+    position:absolute; top:16px; left:22px; right:64px; font-size:12px; font-weight:800; letter-spacing:.01em;
+    color:inherit; opacity:.75; line-height:1.25;
   }
-  .half .half-icon{ margin-bottom:4px; }
-  .half .half-label{ font-size:26px; font-weight:800; }
-  .half .half-sub{ font-size:13px; opacity:.7; font-weight:500; }
+  .half .half-icon{ margin-bottom:2px; }
+  .half .half-label{ font-size:21px; font-weight:800; }
+  .half .half-sub{ font-size:12px; opacity:.7; font-weight:500; }
 
   /* ---- COCINAR: 3 zonas a pantalla completa ---- */
   #view-cocinar.active{
     display:flex; flex-direction:column; position:absolute; inset:0; z-index:1; padding:0;
+    border:12px solid #000; border-radius:22px; overflow:hidden;
   }
   .floating-back{
     position:absolute; top:14px; left:14px; z-index:20;
@@ -192,21 +198,21 @@
 
   /* FAB */
   .fab{
-    position:fixed; bottom:24px; right:calc(50% - 240px + 20px);
+    position:fixed; bottom:34px; right:calc(50% - 240px + 30px);
     width:58px;height:58px; border-radius:50%; background:var(--accent); color:#fff;
     border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
     box-shadow:0 6px 16px rgba(46,125,99,0.4); z-index:40;
   }
-  @media (max-width:480px){ .fab{ right:20px; } }
+  @media (max-width:480px){ .fab{ right:30px; } }
   .fab:active{ transform:scale(0.94); }
 
   .gear-btn{
-    position:fixed; top:18px; right:calc(50% - 240px + 18px);
+    position:fixed; top:30px; right:calc(50% - 240px + 30px);
     width:38px;height:38px; border-radius:50%; background:rgba(255,255,255,0.85); color:var(--ink);
     border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
     box-shadow:0 2px 6px rgba(0,0,0,0.15); z-index:40;
   }
-  @media (max-width:480px){ .gear-btn{ right:18px; } }
+  @media (max-width:480px){ .gear-btn{ right:30px; } }
   .gear-btn:active{ transform:scale(0.92); }
 
   /* modal */
@@ -214,10 +220,16 @@
     position:fixed; inset:0; background:rgba(20,20,18,0.5); z-index:60; display:none;
     align-items:flex-end; justify-content:center;
   }
-  .overlay.open{ display:flex; }
+  .overlay.open{ display:flex; animation: overlayFadeIn 0.2s ease; }
+  @keyframes overlayFadeIn{ from{ opacity:0; } to{ opacity:1; } }
   .modal{
     background:#fff; width:100%; max-width:480px; border-radius:20px 20px 0 0;
     padding:20px 18px 26px; max-height:88vh; overflow-y:auto;
+    animation: modalSlideUp 0.25s ease;
+  }
+  @keyframes modalSlideUp{
+    from{ transform:translateY(40px); opacity:0; }
+    to{ transform:translateY(0); opacity:1; }
   }
   .modal h3{ margin:0 0 4px; font-size:18px; font-weight:800; }
   .modal p.hint{ font-size:12.5px; color:var(--ink-dim); margin:0 0 16px; }
@@ -290,6 +302,11 @@
     position:absolute; top:16px; right:16px; border:none; background:var(--bg); width:30px;height:30px;
     border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-dim);
   }
+  .modal .modal-back{
+    position:absolute; top:16px; left:16px; border:none; background:var(--bg); width:30px;height:30px;
+    border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-dim);
+  }
+  .modal h3{ padding:0 40px; }
   .status-msg{ font-size:13px; text-align:center; margin-top:10px; color:var(--ink-dim); min-height:16px; }
   .status-msg.error{ color:var(--danger); }
 
@@ -298,8 +315,11 @@
     position:fixed; inset:0; background:rgba(20,20,18,0.55); z-index:70; display:none;
     align-items:center; justify-content:center; padding:20px;
   }
-  .confirm-overlay.open{ display:flex; }
-  .confirm-box{ background:#fff; border-radius:16px; padding:20px; max-width:340px; text-align:center; }
+  .confirm-overlay.open{ display:flex; animation: overlayFadeIn 0.2s ease; }
+  .confirm-box{
+    background:#fff; border-radius:16px; padding:20px; max-width:340px; text-align:center;
+    animation: modalSlideUp 0.22s ease;
+  }
   .confirm-box p{ font-size:14px; margin:0 0 16px; color:var(--ink); }
   .confirm-actions{ display:flex; gap:8px; }
   .confirm-actions button{ flex:1; padding:10px; border-radius:10px; border:none; font-weight:700; font-size:13.5px; cursor:pointer; }
@@ -322,17 +342,15 @@
   <div id="view-home" class="view active">
     <div class="half cocinar" id="goCocinar">
       <div class="brand">Bienvenido a La Despensita</div>
-      <svg class="half-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M2 12h20"/><path d="M12 4v2"/><path d="M8 4l.5 2"/><path d="M16 4l-.5 2"/></svg>
+      <svg class="half-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M2 12h20"/><path d="M12 4v2"/><path d="M8 4l.5 2"/><path d="M16 4l-.5 2"/></svg>
       <div class="half-label">Cocinar</div>
-      <div class="half-sub" id="cocinarSub">0 platos guardados</div>
     </div>
     <div class="half inventario" id="goInventario">
-      <svg class="half-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="8" y1="7" x2="8" y2="9"/><line x1="8" y1="15" x2="8" y2="17"/></svg>
+      <svg class="half-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="8" y1="7" x2="8" y2="9"/><line x1="8" y1="15" x2="8" y2="17"/></svg>
       <div class="half-label">Inventario</div>
-      <div class="half-sub" id="inventarioSub">0 productos guardados</div>
     </div>
     <div class="half carrito" id="goCarrito">
-      <svg class="half-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 7H6"/></svg>
+      <svg class="half-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 7H6"/></svg>
       <div class="half-label">Carrito</div>
       <div class="half-sub" id="carritoSub">0 cosas por comprar</div>
     </div>
@@ -359,13 +377,14 @@
   <!-- MODAL: añadir al carrito (guiado) -->
   <div class="overlay" id="cartAddOverlay">
     <div class="modal">
+      <button class="modal-back" data-close="cartAddOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button class="close-x" data-close="cartAddOverlay">✕</button>
       <h3>Añadir al carrito</h3>
 
       <div id="cartAddStepList">
         <input type="text" id="cartSearchInput" placeholder="Buscar producto por nombre…">
         <p class="field-label">Todos los productos</p>
-        <div id="cartAllProductsList" style="max-height:380px; overflow-y:auto;"></div>
+        <div id="cartAllProductsList" style="height:380px; overflow-y:auto;"></div>
       </div>
 
       <div id="cartAddStepQty" style="display:none;">
@@ -419,6 +438,7 @@
   <!-- MODAL: añadir producto directamente al inventario -->
   <div class="overlay" id="invAddOverlay">
     <div class="modal">
+      <button class="modal-back" data-close="invAddOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button class="close-x" data-close="invAddOverlay">✕</button>
       <h3>Añadir producto</h3>
 
@@ -452,6 +472,7 @@
   <!-- MODAL: añadir producto nuevo al catálogo -->
   <div class="overlay" id="addProductOverlay">
     <div class="modal">
+      <button class="modal-back" data-close="addProductOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button class="close-x" data-close="addProductOverlay">✕</button>
       <h3>Nuevo producto</h3>
       <label class="field-label">Nombre</label>
@@ -483,6 +504,7 @@
   <!-- MODAL: ticket -->
   <div class="overlay" id="ticketOverlay">
     <div class="modal">
+      <button class="modal-back" data-close="ticketOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button class="close-x" data-close="ticketOverlay">✕</button>
       <h3>Añadir ticket</h3>
       <p class="hint">Pega el texto del email, o sube el PDF del ticket. De momento las fotos no están soportadas (lo añadimos más adelante si hace falta).</p>
@@ -515,6 +537,7 @@
   <!-- MODAL: añadir plato -->
   <div class="overlay" id="dishOverlay">
     <div class="modal">
+      <button class="modal-back" data-close="dishOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button class="close-x" data-close="dishOverlay">✕</button>
       <h3>Nuevo plato</h3>
       <label class="field-label">Nombre del plato</label>
@@ -579,19 +602,19 @@ let inventory = [];
 let dishes = [];
 
 const INV_ZONES = {
-  nevera:     { label:'Nevera',     icon:`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/>`, color:'#2C5C99', bg:'#DCE7F5' },
-  congelador: { label:'Congelador', icon:`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="8" y1="6" x2="8" y2="9"/><line x1="12" y1="6" x2="12" y2="9"/><line x1="16" y1="6" x2="16" y2="9"/>`, color:'#3E7C99', bg:'#DCEEF5' },
-  despensa:   { label:'Despensa',   icon:`<rect x="3" y="6" width="18" height="14" rx="1"/><line x1="3" y1="11" x2="21" y2="11"/>`, color:'#A16A2A', bg:'#F3E7D4' },
-  otros:      { label:'Otros',      icon:`<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>`, color:'#7A6B5C', bg:'#EDE7DE' },
+  nevera:     { label:'Nevera',     icon:`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/>`, color:'#2C3C52', bg:'#E2E7EF' },
+  congelador: { label:'Congelador', icon:`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="8" y1="6" x2="8" y2="9"/><line x1="12" y1="6" x2="12" y2="9"/><line x1="16" y1="6" x2="16" y2="9"/>`, color:'#39586A', bg:'#DEE7EC' },
+  despensa:   { label:'Despensa',   icon:`<rect x="3" y="6" width="18" height="14" rx="1"/><line x1="3" y1="11" x2="21" y2="11"/>`, color:'#6E5636', bg:'#ECE4D7' },
+  otros:      { label:'Otros',      icon:`<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>`, color:'#5C5347', bg:'#E9E4DA' },
 };
 const INV_ORDER = ['nevera','congelador','despensa'];
 const MANAGE_ORDER = ['nevera','congelador','despensa','otros'];
 
 
 const DISH_SECTIONS = {
-  comida:  { label:'Comida',          bg:'#FBF3D9', fg:'#8A6D1E' },
-  cena:    { label:'Cena',            bg:'#DEE6F7', fg:'#3B4A7A' },
-  general: { label:'Platos generales', bg:'#DFF3E6', fg:'#1E6B45' },
+  comida:  { label:'Comida',          bg:'#F1ECD9', fg:'#6B5A2E' },
+  cena:    { label:'Cena',            bg:'#E1E4EE', fg:'#3A4256' },
+  general: { label:'Platos generales', bg:'#E1EBE3', fg:'#33523F' },
 };
 const DISH_ORDER = ['comida','cena','general'];
 
@@ -638,8 +661,26 @@ function goTo(view, fromPopstate, data){
 function openInvCategory(cat){
   goTo('inv-detail', false, { category: cat });
 }
+function openOverlay(id){
+  document.getElementById(id).classList.add('open');
+  history.pushState({ modal: id }, '', location.hash);
+}
+function closeOverlay(id){
+  const el = document.getElementById(id);
+  if (!el.classList.contains('open')) return;
+  el.classList.remove('open');
+  if (history.state && history.state.modal === id){
+    history.back();
+  }
+}
 history.replaceState({ view: 'home' }, '', '#home');
 window.addEventListener('popstate', (e)=>{
+  // si hay un panel abierto, "atrás" lo cierra primero, sin cambiar de pantalla
+  const openOv = document.querySelector('.overlay.open, .confirm-overlay.open');
+  if (openOv && (!e.state || !e.state.modal)){
+    openOv.classList.remove('open');
+    return;
+  }
   const view = (e.state && e.state.view) || 'home';
   goTo(view, true, e.state);
 });
@@ -650,8 +691,6 @@ document.getElementById('gearBtn').onclick = ()=> goTo('manage-products');
 document.querySelectorAll('[data-go]').forEach(b=> b.onclick = ()=> history.back());
 
 function renderHome(){
-  document.getElementById('cocinarSub').textContent = dishes.length + ' platos guardados';
-  document.getElementById('inventarioSub').textContent = inventory.length + ' productos guardados';
   document.getElementById('carritoSub').textContent = cart.length + ' cosas por comprar';
 }
 
@@ -937,15 +976,15 @@ let confirmCallback = null;
 function showConfirm(text, onYes){
   document.getElementById('confirmText').textContent = text;
   confirmCallback = onYes;
-  document.getElementById('confirmOverlay').classList.add('open');
+  openOverlay('confirmOverlay');
 }
 document.getElementById('confirmYes').onclick = ()=>{
-  document.getElementById('confirmOverlay').classList.remove('open');
+  closeOverlay('confirmOverlay');
   if (confirmCallback) confirmCallback();
   confirmCallback = null;
 };
 document.getElementById('confirmNo').onclick = ()=>{
-  document.getElementById('confirmOverlay').classList.remove('open');
+  closeOverlay('confirmOverlay');
   confirmCallback = null;
 };
 
@@ -973,7 +1012,7 @@ function openDishModal(section){
   rows.insertAdjacentHTML('beforeend', ingRowTemplate());
   bindIngRowRemovers();
   bindIngAutocomplete();
-  document.getElementById('dishOverlay').classList.add('open');
+  openOverlay('dishOverlay');
 }
 function bindIngRowRemovers(){
   document.querySelectorAll('#ingRows .rm').forEach(btn=>{
@@ -1047,7 +1086,7 @@ document.getElementById('saveDishBtn').onclick = ()=>{
 
   dishes.push({ id: 'dish_' + Date.now(), name, section, ingredients });
   saveDishes();
-  document.getElementById('dishOverlay').classList.remove('open');
+  closeOverlay('dishOverlay');
   renderCocinar(); renderHome();
   toast('Plato «' + name + '» añadido.');
 };
@@ -1060,17 +1099,17 @@ document.getElementById('fabAdd').onclick = ()=>{
   document.getElementById('ticketStatus').textContent = '';
   document.getElementById('ticketReview').style.display = 'none';
   document.getElementById('ticketUnrecognized').style.display = 'none';
-  document.getElementById('ticketOverlay').classList.add('open');
+  openOverlay('ticketOverlay');
 };
 document.getElementById('ticketFile').addEventListener('change', (e)=>{
   const f = e.target.files[0];
   document.getElementById('ticketFileName').textContent = f ? '✓ ' + f.name : '';
 });
 document.querySelectorAll('[data-close]').forEach(btn=>{
-  btn.onclick = ()=> document.getElementById(btn.dataset.close).classList.remove('open');
+  btn.onclick = ()=> closeOverlay(btn.dataset.close);
 });
 document.querySelectorAll('.overlay').forEach(ov=>{
-  ov.addEventListener('click', (e)=>{ if (e.target === ov) ov.classList.remove('open'); });
+  ov.addEventListener('click', (e)=>{ if (e.target === ov) closeOverlay(ov.id); });
 });
 
 let pdfJsLoadPromise = null;
@@ -1290,7 +1329,7 @@ document.getElementById('ticketConfirmBtn').addEventListener('click', ()=>{
   });
 
   saveInventory();
-  document.getElementById('ticketOverlay').classList.remove('open');
+  closeOverlay('ticketOverlay');
   document.getElementById('ticketReview').style.display = 'none';
   document.getElementById('ticketText').value = '';
   document.getElementById('ticketFile').value = '';
@@ -1409,7 +1448,7 @@ function openCartAddModal(){
   document.getElementById('cartSearchInput').value = '';
   cartAddSelected = null;
   renderCartAllProducts('');
-  document.getElementById('cartAddOverlay').classList.add('open');
+  openOverlay('cartAddOverlay');
 }
 document.getElementById('openCartAddBtn').onclick = openCartAddModal;
 
@@ -1434,7 +1473,7 @@ document.getElementById('cartAddConfirmBtn').onclick = ()=>{
   if (!cartAddSelected) return;
   const qty = Number(document.getElementById('cartAddQty').value) || 1;
   addToCart(cartAddSelected.name, false, qty, cartAddSelected.category);
-  document.getElementById('cartAddOverlay').classList.remove('open');
+  closeOverlay('cartAddOverlay');
   renderCarrito(); renderHome();
   toast('«' + cartAddSelected.name + '» añadido al carrito');
   cartAddSelected = null;
@@ -1469,7 +1508,7 @@ document.getElementById('openInvAddBtn').onclick = ()=>{
   document.getElementById('invAddCatLabel').textContent = 'Elige el producto (' + INV_ZONES[cat].label + ')';
   document.getElementById('invAddStepProduct').style.display = 'block';
   document.getElementById('invAddStepQty').style.display = 'none';
-  document.getElementById('invAddOverlay').classList.add('open');
+  openOverlay('invAddOverlay');
 };
 document.getElementById('invBackToProductStep').onclick = (e)=>{
   e.preventDefault();
@@ -1493,7 +1532,7 @@ document.getElementById('invAddConfirmBtn').onclick = ()=>{
     });
   }
   saveInventory();
-  document.getElementById('invAddOverlay').classList.remove('open');
+  closeOverlay('invAddOverlay');
   renderInvDetail(); renderHome();
   toast('«' + invAddSelected.name + '» añadido al inventario');
   invAddSelected = null;
@@ -1552,7 +1591,7 @@ document.getElementById('openAddProductBtn').onclick = ()=>{
   document.getElementById('newProductCategory').value = 'nevera';
   document.getElementById('newProductShelfLife').value = 7;
   document.getElementById('newProductStatus').textContent = '';
-  document.getElementById('addProductOverlay').classList.add('open');
+  openOverlay('addProductOverlay');
 };
 
 document.getElementById('saveNewProductBtn').onclick = ()=>{
@@ -1570,7 +1609,7 @@ document.getElementById('saveNewProductBtn').onclick = ()=>{
   if (catalog[slug]) slug = slug + '_' + Date.now().toString(36).slice(-4);
   catalog[slug] = { name, category, shelfLifeDays, aliases: [normalize(name)] };
   saveCatalog();
-  document.getElementById('addProductOverlay').classList.remove('open');
+  closeOverlay('addProductOverlay');
   renderManageProducts();
   toast('«' + name + '» añadido al diccionario de productos');
 };
