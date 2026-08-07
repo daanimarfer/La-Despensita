@@ -148,6 +148,19 @@
   .stepper button:active{ background:var(--line); }
   .stepper span{ font-size:12.5px; min-width:34px; text-align:center; font-weight:600; }
   .icon-btn{ border:none; background:transparent; cursor:pointer; padding:5px; color:#B7ADA0; display:flex; }
+  .dish-menu{
+    position:absolute; top:44px; right:16px; background:#fff; border-radius:10px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.18); z-index:50; overflow:hidden; min-width:140px;
+  }
+  .dish-menu-opt{ padding:12px 14px; font-size:14px; font-weight:600; cursor:pointer; color:var(--ink); }
+  .dish-menu-opt:active{ background:var(--bg); }
+  .dish-menu-opt.danger{ color:var(--danger); }
+  .ing-detail-row{
+    display:flex; justify-content:space-between; align-items:center; background:var(--card);
+    border:1px solid var(--line); border-radius:10px; padding:11px 13px; margin-bottom:7px; font-size:14px;
+  }
+  .ing-detail-row .idname{ font-weight:600; }
+  .ing-detail-row .idqty{ color:var(--ink-dim); font-size:13px; font-weight:600; }
   .icon-btn:active{ color:var(--danger); }
 
   .cart-item{
@@ -240,7 +253,10 @@
   .ing-row{ display:flex; gap:6px; margin-bottom:6px; align-items:center; }
   .ing-row input[type=text]{ flex:1; }
   .ing-row input[type=number]{ width:60px; padding:10px 6px; border-radius:10px; border:1px solid var(--line); background:var(--bg); font-size:13px; }
-  .ing-row input[name=unit]{ width:60px; padding:10px 6px; }
+  .ing-row .ing-unit-label{
+    width:34px; text-align:center; font-size:12px; color:var(--ink-dim); font-weight:700;
+    background:var(--bg); border-radius:8px; padding:9px 2px; flex-shrink:0;
+  }
   .ing-row .rm{ border:none; background:transparent; color:#B7ADA0; padding:4px; cursor:pointer; }
   .ing-name-wrap{ position:relative; flex:1; }
   .ing-suggest{
@@ -360,6 +376,39 @@
     <div id="cocinarZones"></div>
   </div>
 
+  <!-- DETALLE DE UN PLATO -->
+  <div id="view-dish-detail" class="view">
+    <div class="topbar">
+      <button class="back" data-go="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <h2 id="dishDetailTitle" style="flex:1;">Plato</h2>
+      <button class="icon-btn" id="dishMenuBtn" style="position:relative;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <div class="dish-menu" id="dishMenuDropdown" style="display:none;">
+        <div class="dish-menu-opt" id="dishMenuEdit">✏️ Editar</div>
+        <div class="dish-menu-opt danger" id="dishMenuDelete">🗑 Eliminar</div>
+      </div>
+    </div>
+    <div style="padding:0 16px 14px;">
+      <div class="badge" id="dishDetailBadge" style="font-size:13px; padding:5px 12px;"></div>
+    </div>
+    <div style="padding:0 16px;" id="dishDetailIngredients"></div>
+    <div style="padding:14px 16px 24px;">
+      <button class="btn cook" id="dishDetailCookBtn" style="width:100%; padding:13px; font-size:14px;">Cocinar</button>
+    </div>
+  </div>
+
+  <!-- MODAL: para cuántas personas -->
+  <div class="confirm-overlay" id="servingsOverlay">
+    <div class="confirm-box">
+      <p style="font-weight:800; font-size:16px;">¿Para cuántas personas?</p>
+      <div class="confirm-actions">
+        <button class="no" id="servings1Btn">Solo yo (x1)</button>
+        <button class="yes" id="servings2Btn" style="background:var(--accent);">Los dos (x2)</button>
+      </div>
+    </div>
+  </div>
+
   <!-- CARRITO -->
   <div id="view-carrito" class="view">
     <div class="topbar">
@@ -448,8 +497,8 @@
       <div id="invAddStepQty" style="display:none;">
         <p class="hint"><a href="#" id="invBackToProductStep" style="color:var(--accent); text-decoration:none;">‹ Elegir otro producto</a></p>
         <p class="field-label" id="invAddSelectedName" style="font-size:16px; font-weight:800; color:var(--ink);"></p>
-        <label class="field-label">Cantidad</label>
-        <input type="number" id="invAddQty" value="1" min="1">
+        <label class="field-label">Cantidad (<span id="invAddUnitLabel">ud</span>)</label>
+        <input type="number" id="invAddQty" value="1" min="0" step="1">
         <button class="btn-save" id="invAddConfirmBtn">Añadir al inventario</button>
       </div>
     </div>
@@ -472,7 +521,7 @@
     <div class="modal">
       <button class="modal-back" data-close="addProductOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button class="close-x" data-close="addProductOverlay">✕</button>
-      <h3>Nuevo producto</h3>
+      <h3 id="addProductTitle">Nuevo producto</h3>
       <label class="field-label">Nombre</label>
       <input type="text" id="newProductName" placeholder="Ej: Salchichas frescas">
       <label class="field-label">Sección</label>
@@ -484,6 +533,13 @@
       </select>
       <label class="field-label">Caducidad estimada (días desde la compra)</label>
       <input type="number" id="newProductShelfLife" value="7" min="1">
+      <label class="field-label">Se mide en</label>
+      <select id="newProductUnit">
+        <option value="unidad">Unidades</option>
+        <option value="gramo">Gramos</option>
+      </select>
+      <label class="field-label">Cuánto trae realmente cada compra (ej: pack de 6 hamburguesas → 6)</label>
+      <input type="number" id="newProductPackQty" value="1" min="0.1" step="0.1">
       <button class="btn-save" id="saveNewProductBtn">Guardar producto</button>
       <div class="status-msg" id="newProductStatus"></div>
     </div>
@@ -537,14 +593,13 @@
     <div class="modal">
       <button class="modal-back" data-close="dishOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <button class="close-x" data-close="dishOverlay">✕</button>
-      <h3>Nuevo plato</h3>
+      <h3 id="dishOverlayTitle">Nuevo plato</h3>
       <label class="field-label">Nombre del plato</label>
       <input type="text" id="dishName" placeholder="Ej: Pasta con tomate">
       <label class="field-label">Sección</label>
       <select id="dishSection">
         <option value="comida">Comida</option>
         <option value="cena">Cena</option>
-        <option value="general">Platos generales</option>
       </select>
       <label class="field-label">Ingredientes necesarios</label>
       <div id="ingRows"></div>
@@ -590,7 +645,7 @@ const REF = {
   cart: doc(db, 'despensa', 'cart'),
   products: doc(db, 'despensa', 'products'),
 };
-const CATALOG_VERSION = 4;
+const CATALOG_VERSION = 5;
 
 const DEFAULT_CATALOG = {"aceite_de_girasol": {"name": "Aceite de girasol", "category": "despensa", "shelfLifeDays": 365, "aliases": ["aceite de girasol"]}, "aceituna_r/anchoa_p3": {"name": "Aceitunas rellenas de anchoa", "category": "despensa", "shelfLifeDays": 180, "aliases": ["aceituna r/anchoa p3"]}, "alubia_pinta": {"name": "Alubia pinta (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["alubia pinta"]}, "anchoas_a.girasol_p3": {"name": "Anchoas en aceite de girasol", "category": "despensa", "shelfLifeDays": 365, "aliases": ["anchoas a.girasol p3"]}, "aroma_de_vainilla": {"name": "Aroma de vainilla", "category": "despensa", "shelfLifeDays": 365, "aliases": ["aroma de vainilla"]}, "arroz_cocido": {"name": "Arroz cocido (bolsa)", "category": "despensa", "shelfLifeDays": 200, "aliases": ["arroz cocido"]}, "arroz_largo": {"name": "Arroz largo", "category": "despensa", "shelfLifeDays": 365, "aliases": ["arroz largo"]}, "atun": {"name": "Atún", "category": "despensa", "shelfLifeDays": 365, "aliases": ["atun aceite girasol", "atun claro giras pk6", "atun claro natural"]}, "bacon_ahumado": {"name": "Bacon ahumado", "category": "nevera", "shelfLifeDays": 7, "aliases": ["bacon ahumado natur.", "bacon cocido ahumado"]}, "bacon_lonchas": {"name": "Bacon en lonchas", "category": "nevera", "shelfLifeDays": 7, "aliases": ["cintas de bacon", "bacon lonchas"]}, "base_pizza_extrafina": {"name": "Base de pizza extrafina", "category": "congelador", "shelfLifeDays": 6, "aliases": ["base pizza extrafina"]}, "blanqueta_pollo": {"name": "Blanqueta de pollo (preparado)", "category": "nevera", "shelfLifeDays": 3, "aliases": ["blanqueta pollo"]}, "caballa": {"name": "Caballa en conserva", "category": "despensa", "shelfLifeDays": 365, "aliases": ["caballa fte oliv bpk", "caballa oliv red sal"]}, "calabacin": {"name": "Calabacín", "category": "nevera", "shelfLifeDays": 7, "aliases": ["calabacin", "calabacin blanco"]}, "calabaza": {"name": "Calabaza", "category": "nevera", "shelfLifeDays": 21, "aliases": ["calabaza"]}, "caldo_de_cocido": {"name": "Caldo de cocido", "category": "despensa", "shelfLifeDays": 180, "aliases": ["caldo de cocido"]}, "camembert": {"name": "Queso Camembert", "category": "nevera", "shelfLifeDays": 20, "aliases": ["camembert"]}, "campesinos": {"name": "Panecillos campesinos", "category": "despensa", "shelfLifeDays": 4, "aliases": ["campesinos"]}, "canonigos": {"name": "Canónigos (lechuga)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["canonigos"]}, "cebolla_1kg": {"name": "Cebolla", "category": "despensa", "shelfLifeDays": 30, "aliases": ["cebolla 1kg"]}, "cebolla_caramelizada": {"name": "Cebolla caramelizada", "category": "nevera", "shelfLifeDays": 10, "aliases": ["cebolla caramelizada"]}, "cilantro": {"name": "Cilantro fresco", "category": "nevera", "shelfLifeDays": 7, "aliases": ["cilantro"]}, "clara_liquida_pasteu": {"name": "Clara de huevo líquida pasteurizada", "category": "nevera", "shelfLifeDays": 20, "aliases": ["clara liquida pasteu"]}, "contramuslo_deshuesa": {"name": "Contramuslo de pollo deshuesado", "category": "congelador", "shelfLifeDays": 3, "aliases": ["contramuslo deshuesa"]}, "couscous": {"name": "Cuscús", "category": "despensa", "shelfLifeDays": 365, "aliases": ["couscous"]}, "crema_calabacin": {"name": "Crema de calabacín (preparada)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["crema calabacin"]}, "crema_calabaza": {"name": "Crema de calabaza (preparada)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["crema calabaza"]}, "croissant": {"name": "Croissant", "category": "despensa", "shelfLifeDays": 4, "aliases": ["croissant"]}, "empanada_atun": {"name": "Empanada de atún", "category": "nevera", "shelfLifeDays": 4, "aliases": ["empanada atun"]}, "escalopines_de_lomo": {"name": "Escalopines de lomo", "category": "congelador", "shelfLifeDays": 3, "aliases": ["escalopines de lomo"]}, "fabada": {"name": "Fabada asturiana", "category": "despensa", "shelfLifeDays": 365, "aliases": ["fabada"]}, "filete_de_lomo": {"name": "Filete de lomo", "category": "congelador", "shelfLifeDays": 3, "aliases": ["filete de lomo"]}, "freson": {"name": "Fresón (fresas)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["freson"]}, "gallina_blanca_sopas": {"name": "Sopa Gallina Blanca", "category": "despensa", "shelfLifeDays": 365, "aliases": ["gallina blanca sopas"]}, "garbanzos": {"name": "Garbanzos (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["garbanzos"]}, "gazpacho_tradicional": {"name": "Gazpacho tradicional", "category": "nevera", "shelfLifeDays": 7, "aliases": ["gazpacho tradicional"]}, "gnocchi": {"name": "Gnocchi", "category": "despensa", "shelfLifeDays": 25, "aliases": ["gnocchi", "gnocchi de patata", "noquis de patata"]}, "gofre_clasico": {"name": "Gofre clásico", "category": "nevera", "shelfLifeDays": 4, "aliases": ["gofre clasico"]}, "gouda": {"name": "Queso Gouda en lonchas", "category": "nevera", "shelfLifeDays": 20, "aliases": ["gouda lonchas", "queso gouda lonchas", "lonchas gouda tierno"]}, "guacamole_200_g": {"name": "Guacamole", "category": "nevera", "shelfLifeDays": 5, "aliases": ["guacamole 200 g"]}, "guindilla_picante": {"name": "Guindillas picantes (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["guindilla picante"]}, "guisante_fino": {"name": "Guisantes finos (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["guisante fino"]}, "hamburguesas": {"name": "Hamburguesas", "category": "congelador", "shelfLifeDays": 120, "aliases": ["burger cerdo", "burger meat cerdo", "burger meat mixta 1k", "burger pollo"], "packSize": 6}, "huevos": {"name": "Huevos frescos", "category": "nevera", "shelfLifeDays": 21, "aliases": ["24 huevos frescos", "huevos gallinero24ml"]}, "hummus_clasico": {"name": "Hummus clásico", "category": "nevera", "shelfLifeDays": 6, "aliases": ["hummus clasico"]}, "jamoncitos_barbacoa": {"name": "Jamoncitos de pollo barbacoa", "category": "congelador", "shelfLifeDays": 3, "aliases": ["jamoncitos barbacoa"]}, "kiwi_verde_granel": {"name": "Kiwi", "category": "nevera", "shelfLifeDays": 10, "aliases": ["kiwi verde granel"]}, "lonchas_cheddar": {"name": "Queso cheddar en lonchas", "category": "nevera", "shelfLifeDays": 20, "aliases": ["lonchas cheddar"]}, "macarron_nª6": {"name": "Macarrones", "category": "despensa", "shelfLifeDays": 365, "aliases": ["macarron nª6"]}, "maiz_dulce": {"name": "Maíz dulce (lata)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["maiz dulce"]}, "margarina_con_sal": {"name": "Margarina con sal", "category": "nevera", "shelfLifeDays": 60, "aliases": ["margarina con sal"]}, "medialunas_calabaza": {"name": "Medialunas de calabaza", "category": "despensa", "shelfLifeDays": 5, "aliases": ["medialunas calabaza"]}, "melocoton_en_mitades": {"name": "Melocotón en mitades (lata)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["melocoton en mitades"]}, "melocoton_s/az": {"name": "Melocotón sin azúcar (lata)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["melocoton s/az"]}, "menestra": {"name": "Menestra de verduras", "category": "congelador", "shelfLifeDays": 180, "aliases": ["menestra"]}, "mezcla_4_quesos": {"name": "Mezcla de 4 quesos rallados", "category": "nevera", "shelfLifeDays": 15, "aliases": ["mezcla 4 quesos"]}, "mini_tortillas_trigo": {"name": "Mini tortillas de trigo", "category": "despensa", "shelfLifeDays": 30, "aliases": ["mini tortillas trigo"]}, "mozzarella": {"name": "Mozzarella", "category": "nevera", "shelfLifeDays": 10, "aliases": ["mozzarella", "mozzarella bufala", "mozzarella fresca", "mozzarella rallado"]}, "nata": {"name": "Nata para cocinar", "category": "nevera", "shelfLifeDays": 12, "aliases": ["nata cocinar fresca", "nata montar", "nata para cocinar"]}, "pan_blanco_familiar": {"name": "Pan blanco familiar", "category": "despensa", "shelfLifeDays": 5, "aliases": ["pan blanco familiar"]}, "pan_de_molde_blanco": {"name": "Pan de molde blanco", "category": "despensa", "shelfLifeDays": 7, "aliases": ["pan de molde blanco"]}, "pan_matalahuva_2%": {"name": "Panecillos de matalahúva", "category": "despensa", "shelfLifeDays": 5, "aliases": ["pan matalahuva 2%"]}, "pan_maxi_hamburguesa": {"name": "Pan de hamburguesa (maxi)", "category": "despensa", "shelfLifeDays": 5, "aliases": ["pan maxi hamburguesa"]}, "panes_burger_brioche": {"name": "Panes brioche para burger", "category": "despensa", "shelfLifeDays": 5, "aliases": ["panes burger brioche"]}, "panes_hot_dog": {"name": "Panes de hot dog", "category": "despensa", "shelfLifeDays": 5, "aliases": ["panes hot dog"]}, "parrillada_verdura_a": {"name": "Parrillada de verduras", "category": "congelador", "shelfLifeDays": 180, "aliases": ["parrillada verdura a"]}, "patata_waffle": {"name": "Patatas waffle (congeladas)", "category": "congelador", "shelfLifeDays": 270, "aliases": ["patata waffle"]}, "patatas_campestres": {"name": "Patatas campestres (congeladas)", "category": "congelador", "shelfLifeDays": 270, "aliases": ["patatas campestres"]}, "patatas_gajo": {"name": "Patatas gajo (congeladas)", "category": "congelador", "shelfLifeDays": 270, "aliases": ["patatas gajo"]}, "patatas_saco": {"name": "Patatas (saco)", "category": "despensa", "shelfLifeDays": 30, "aliases": ["papa 3kg", "papa 5kg", "patata 3 kg"]}, "pech_empanada_s/g": {"name": "Pechuga empanada sin gluten", "category": "congelador", "shelfLifeDays": 4, "aliases": ["pech empanada s/g"]}, "pechuga_pollo": {"name": "Pechuga de pollo", "category": "congelador", "shelfLifeDays": 120, "aliases": ["pechuga", "pechuga pollo", "pechuga entera", "pechuga familiar"]}, "pepinillos_agridulc.": {"name": "Pepinillos agridulces (bote)", "category": "despensa", "shelfLifeDays": 365, "aliases": ["pepinillos agridulc."]}, "pimiento_amarillo": {"name": "Pimiento amarillo", "category": "nevera", "shelfLifeDays": 10, "aliases": []}, "pimiento_rojo": {"name": "Pimiento rojo", "category": "nevera", "shelfLifeDays": 10, "aliases": ["pimiento rojo"]}, "pimiento_verde": {"name": "Pimiento verde", "category": "nevera", "shelfLifeDays": 10, "aliases": ["pimiento verde"]}, "platano": {"name": "Plátano", "category": "despensa", "shelfLifeDays": 6, "aliases": ["platano", "platano granel"]}, "pure_de_patatas": {"name": "Puré de patatas", "category": "despensa", "shelfLifeDays": 365, "aliases": ["pure de patata", "pure de patatas", "pure patatas"]}, "q._lonchas_cremoso": {"name": "Queso en lonchas cremoso", "category": "nevera", "shelfLifeDays": 20, "aliases": ["q. lonchas cremoso"]}, "q_semi_mezcla": {"name": "Queso semicurado mezcla", "category": "nevera", "shelfLifeDays": 20, "aliases": ["q semi mezcla"]}, "queso_cabra_medall.": {"name": "Queso de cabra en medallones", "category": "nevera", "shelfLifeDays": 15, "aliases": ["queso cabra medall."]}, "queso_cottage": {"name": "Queso cottage", "category": "nevera", "shelfLifeDays": 10, "aliases": ["queso cottage"]}, "queso_fresco_burgos": {"name": "Queso fresco de Burgos", "category": "nevera", "shelfLifeDays": 10, "aliases": ["queso fresco burgos"]}, "queso_semirojo": {"name": "Queso semicurado", "category": "nevera", "shelfLifeDays": 25, "aliases": ["queso semirojo"]}, "queso_untar_light": {"name": "Queso para untar light", "category": "nevera", "shelfLifeDays": 15, "aliases": ["queso untar light"]}, "rallado_grana_padano": {"name": "Queso Grana Padano rallado", "category": "nevera", "shelfLifeDays": 20, "aliases": ["rallado grana padano"]}, "ravioli_req.espinaca": {"name": "Ravioli de requesón y espinacas", "category": "nevera", "shelfLifeDays": 10, "aliases": ["ravioli req.espinaca"]}, "rulito_cabra": {"name": "Rulito de queso de cabra", "category": "nevera", "shelfLifeDays": 15, "aliases": ["rulito cabra"]}, "sal_fina": {"name": "Sal fina", "category": "despensa", "shelfLifeDays": 3650, "aliases": ["sal fina"]}, "salsa_barbacoa": {"name": "Salsa barbacoa", "category": "despensa", "shelfLifeDays": 180, "aliases": ["salsa barbacoa"]}, "salsa_mexicana": {"name": "Salsa mexicana", "category": "despensa", "shelfLifeDays": 180, "aliases": ["salsa mexicana"]}, "sazonador_fajita": {"name": "Sazonador para fajitas", "category": "despensa", "shelfLifeDays": 365, "aliases": ["sazonador fajita"]}, "solomillo_pollo_s/g": {"name": "Solomillos de pollo sin gluten", "category": "congelador", "shelfLifeDays": 3, "aliases": ["solomillo pollo s/g"]}, "solomillos_empanados": {"name": "Solomillos empanados", "category": "congelador", "shelfLifeDays": 4, "aliases": ["solomillos empanados"]}, "spaghetti_nº3": {"name": "Espaguetis", "category": "despensa", "shelfLifeDays": 365, "aliases": ["spaghetti nº3"]}, "taco_de_bacon": {"name": "Tacos de bacon", "category": "nevera", "shelfLifeDays": 7, "aliases": ["taco de bacon"]}, "tacos_marinados": {"name": "Tacos de carne marinados", "category": "congelador", "shelfLifeDays": 3, "aliases": ["tacos marinados"]}, "tiras_pollo": {"name": "Tiras de pollo", "category": "congelador", "shelfLifeDays": 120, "aliases": ["tiras de pechuga", "tiras pollo"]}, "tom._receta_artesana": {"name": "Tomate frito receta artesana", "category": "despensa", "shelfLifeDays": 365, "aliases": ["tom. receta artesana"]}, "tomate_cherry_pera": {"name": "Tomate cherry pera", "category": "nevera", "shelfLifeDays": 7, "aliases": ["tomate cherry pera"]}, "tomate_frito": {"name": "Tomate frito", "category": "despensa", "shelfLifeDays": 365, "aliases": ["tomate frito"]}, "tomate_salsa": {"name": "Tomate para salsa", "category": "nevera", "shelfLifeDays": 7, "aliases": ["tomate salsa", "tomate salsa 1kg"]}, "tortelloni_carne": {"name": "Tortelloni de carne", "category": "nevera", "shelfLifeDays": 10, "aliases": ["tortelloni carne"]}, "tortilla_avena_6_un": {"name": "Tortillas de avena (6 uds)", "category": "despensa", "shelfLifeDays": 20, "aliases": ["tortilla avena 6 un"]}, "tortillas_de_trigo": {"name": "Tortillas de trigo (wraps)", "category": "despensa", "shelfLifeDays": 20, "aliases": ["tortillas de trigo"]}, "tortillas_mexicanas": {"name": "Tortillas mexicanas (wraps)", "category": "despensa", "shelfLifeDays": 20, "aliases": ["tortillas mexicanas"]}, "wrapidos_texas": {"name": "Wrapidos Texas (wrap relleno)", "category": "nevera", "shelfLifeDays": 5, "aliases": ["wrapidos texas"]}, "wraps_altos_proteina": {"name": "Wraps altos en proteína", "category": "despensa", "shelfLifeDays": 20, "aliases": ["wraps altos proteina"]}, "yak_bolsa_soja": {"name": "Soja texturizada Yak", "category": "despensa", "shelfLifeDays": 180, "aliases": ["yak bolsa soja"]}, "zanahoria_1kg": {"name": "Zanahoria", "category": "nevera", "shelfLifeDays": 21, "aliases": ["zanahoria 1kg"]}};
 const OTROS_CATALOG_V3 = {"agua_mineral": {"name": "Agua mineral", "category": "otros", "shelfLifeDays": 365, "aliases": ["agua mineral natural"]}, "agua_mineral_8l": {"name": "Agua mineral 8L", "category": "otros", "shelfLifeDays": 365, "aliases": ["agua 8l"]}, "almendras_naturales": {"name": "Almendras naturales", "category": "otros", "shelfLifeDays": 270, "aliases": ["almendra natural"]}, "almendras_xxl": {"name": "Almendras XXL", "category": "otros", "shelfLifeDays": 270, "aliases": ["almendras xxl"]}, "anacardos_fritos": {"name": "Anacardos fritos", "category": "otros", "shelfLifeDays": 270, "aliases": ["anacardos fritos"]}, "anacardos_naturales": {"name": "Anacardos naturales", "category": "otros", "shelfLifeDays": 270, "aliases": ["anacardo natural"]}, "azucar_blanco": {"name": "Azúcar blanco", "category": "otros", "shelfLifeDays": 730, "aliases": ["azucar blanco"]}, "bebida_de_avellanas": {"name": "Bebida de avellanas", "category": "otros", "shelfLifeDays": 10, "aliases": ["bebida avellanas"]}, "bebida_de_avena_con_calcio": {"name": "Bebida de avena con calcio", "category": "otros", "shelfLifeDays": 10, "aliases": ["bebida avena calcio"]}, "bebida_de_fruta_bahamas": {"name": "Bebida de fruta Bahamas", "category": "otros", "shelfLifeDays": 180, "aliases": ["bebida fruta bahamas"]}, "bebida_sojacoco_alpro": {"name": "Bebida soja-coco Alpro", "category": "otros", "shelfLifeDays": 10, "aliases": ["alpro nat soja coco"]}, "cacahuete_desgrasado": {"name": "Cacahuete desgrasado", "category": "otros", "shelfLifeDays": 180, "aliases": ["cacahuete desgrasado"]}, "cacahuetes_con_chocolate": {"name": "Cacahuetes con chocolate", "category": "otros", "shelfLifeDays": 180, "aliases": ["cacahuete chocolate"]}, "cereales_crunchy_chocolate": {"name": "Cereales Crunchy chocolate", "category": "otros", "shelfLifeDays": 180, "aliases": ["crunchy choc"]}, "cheetos_pelotazos": {"name": "Cheetos Pelotazos", "category": "otros", "shelfLifeDays": 120, "aliases": ["cheetos pelotazos"]}, "chocodays_snack_chocolate": {"name": "ChocoDays (snack chocolate)", "category": "otros", "shelfLifeDays": 180, "aliases": ["chocodays"]}, "chocolate_blanco_de_fundir": {"name": "Chocolate blanco de fundir", "category": "otros", "shelfLifeDays": 270, "aliases": ["choco fundir blanco"]}, "copos_integrales_banados_en_chocolate": {"name": "Copos integrales bañados en chocolate", "category": "otros", "shelfLifeDays": 180, "aliases": ["copo int.banado choc"]}, "crema_de_cacahuete_100": {"name": "Crema de cacahuete 100%", "category": "otros", "shelfLifeDays": 180, "aliases": ["crema 100% cacahuete"]}, "crema_de_cacao_dos_sabores": {"name": "Crema de cacao dos sabores", "category": "otros", "shelfLifeDays": 180, "aliases": ["crema cacao 2 sabor"]}, "cuajada": {"name": "Cuajada", "category": "otros", "shelfLifeDays": 10, "aliases": ["cuajada"]}, "fuze_tea_mangopina": {"name": "Fuze Tea mango-piña", "category": "otros", "shelfLifeDays": 180, "aliases": ["fuze tea mango pina"]}, "galletas_con_chocolate_con_leche": {"name": "Galletas con chocolate con leche", "category": "otros", "shelfLifeDays": 180, "aliases": ["galletas choco leche"]}, "galletas_digestive_chocolate": {"name": "Galletas Digestive chocolate", "category": "otros", "shelfLifeDays": 180, "aliases": ["gall digestive choco"]}, "galletas_divertidas": {"name": "Galletas Divertidas", "category": "otros", "shelfLifeDays": 180, "aliases": ["divertidas"]}, "galletas_mini_cookies": {"name": "Galletas mini cookies", "category": "otros", "shelfLifeDays": 180, "aliases": ["galleta mini cookies"]}, "galletas_morenazos_chocolate_negro": {"name": "Galletas Morenazos chocolate negro", "category": "otros", "shelfLifeDays": 180, "aliases": ["morenazos choco neg."]}, "galletas_tosta_rica": {"name": "Galletas Tosta Rica", "category": "otros", "shelfLifeDays": 180, "aliases": ["galleta tosta-rica"]}, "hielo_para_coctel": {"name": "Hielo para cóctel", "category": "otros", "shelfLifeDays": 180, "aliases": ["hielo cocktail"]}, "jamon_cocido_extra": {"name": "Jamón cocido extra", "category": "otros", "shelfLifeDays": 7, "aliases": ["jamon cocido extra"]}, "jamon_york_en_lonchas_maxi": {"name": "Jamón York en lonchas (maxi)", "category": "otros", "shelfLifeDays": 10, "aliases": ["maxi york lonchas"]}, "leche_con_chocolate_blanco": {"name": "Leche con chocolate blanco", "category": "otros", "shelfLifeDays": 180, "aliases": ["leche choco blanco"]}, "leche_semidesnatada": {"name": "Leche semidesnatada", "category": "otros", "shelfLifeDays": 180, "aliases": ["leche semi"]}, "leche_semidesnatada_pack_6": {"name": "Leche semidesnatada (pack 6)", "category": "otros", "shelfLifeDays": 180, "aliases": ["leche semi p6"]}, "limonada_light": {"name": "Limonada light", "category": "otros", "shelfLifeDays": 180, "aliases": ["limonada light 1,5l"]}, "limonada_natural": {"name": "Limonada natural", "category": "otros", "shelfLifeDays": 180, "aliases": ["limonada natural"]}, "lomo_cocido_fiambre": {"name": "Lomo cocido (fiambre)", "category": "otros", "shelfLifeDays": 10, "aliases": ["lomo cocido"]}, "nachos": {"name": "Nachos", "category": "otros", "shelfLifeDays": 180, "aliases": ["nachos"]}, "nueces_naturales": {"name": "Nueces naturales", "category": "otros", "shelfLifeDays": 270, "aliases": ["nuez natural"]}, "pack_bebida_de_avena": {"name": "Pack bebida de avena", "category": "otros", "shelfLifeDays": 180, "aliases": ["pack beb. avena bar"]}, "pack_leche_semidesnatada": {"name": "Pack leche semidesnatada", "category": "otros", "shelfLifeDays": 180, "aliases": ["pack leche semi"]}, "pack_leche_semidesnatada_xxl": {"name": "Pack leche semidesnatada XXL", "category": "otros", "shelfLifeDays": 180, "aliases": ["pack leche semi xxl"]}, "palomitas_de_mantequilla_microondas": {"name": "Palomitas de mantequilla (microondas)", "category": "otros", "shelfLifeDays": 270, "aliases": ["palomit. mantequilla"]}, "patatas_crujientes_snack": {"name": "Patatas crujientes (snack)", "category": "otros", "shelfLifeDays": 180, "aliases": ["patatas crujientes"]}, "patatas_fritas_sabor_queso_y_cebolla": {"name": "Patatas fritas sabor queso y cebolla", "category": "otros", "shelfLifeDays": 180, "aliases": ["patata queso/cebolla"]}, "patatas_paja_snack": {"name": "Patatas paja (snack)", "category": "otros", "shelfLifeDays": 180, "aliases": ["patata paja"]}, "pate_fresco_a_la_pimienta": {"name": "Paté fresco a la pimienta", "category": "otros", "shelfLifeDays": 10, "aliases": ["pate fresco pimienta"]}, "pechuga_de_pavo_bipack": {"name": "Pechuga de pavo (bipack)", "category": "otros", "shelfLifeDays": 5, "aliases": ["pechuga pavo bipack"]}, "pimiento_tricolor": {"name": "Pimiento tricolor", "category": "otros", "shelfLifeDays": 10, "aliases": ["pimiento tricolor"]}, "pringles": {"name": "Pringles", "category": "otros", "shelfLifeDays": 270, "aliases": ["pringles"]}, "pringles_sabor_paprika": {"name": "Pringles sabor paprika", "category": "otros", "shelfLifeDays": 270, "aliases": ["pringles paprika"]}, "refresco_tropical_sin_gas": {"name": "Refresco tropical sin gas", "category": "otros", "shelfLifeDays": 180, "aliases": ["tropical s/gas 1,5l"]}, "reganas_picos_de_pan": {"name": "Regañás (picos de pan)", "category": "otros", "shelfLifeDays": 180, "aliases": ["reganas"]}, "ron_blanco": {"name": "Ron blanco", "category": "otros", "shelfLifeDays": 1825, "aliases": ["ron blanco"]}, "salchichas_hot_dog": {"name": "Salchichas Hot Dog", "category": "otros", "shelfLifeDays": 20, "aliases": ["hot dogs"]}, "sirope_de_avellana": {"name": "Sirope de avellana", "category": "otros", "shelfLifeDays": 270, "aliases": ["sirope c. avellana"]}, "sobrasada_selecta": {"name": "Sobrasada selecta", "category": "otros", "shelfLifeDays": 20, "aliases": ["sobrasada selecta"]}, "te_frio_mangopina": {"name": "Té frío mango-piña", "category": "otros", "shelfLifeDays": 180, "aliases": ["te mango-pina"]}, "tortitas_de_arroz_con_yogur": {"name": "Tortitas de arroz con yogur", "category": "otros", "shelfLifeDays": 180, "aliases": ["tortitas arroz yogur"]}, "tortitas_de_legumbre": {"name": "Tortitas de legumbre", "category": "otros", "shelfLifeDays": 180, "aliases": ["tortita legumbre 44%"]}, "tortitas_de_maiz_con_jamon_serrano": {"name": "Tortitas de maíz con jamón serrano", "category": "otros", "shelfLifeDays": 180, "aliases": ["tortita maiz serrano"]}, "yogur_griego_natural": {"name": "Yogur griego natural", "category": "otros", "shelfLifeDays": 12, "aliases": ["griego natural"]}, "yogur_natural": {"name": "Yogur natural", "category": "otros", "shelfLifeDays": 12, "aliases": ["yogur natural"]}, "yogur_proteico_stracciatella": {"name": "Yogur proteico stracciatella", "category": "otros", "shelfLifeDays": 10, "aliases": ["+proteinas stracciat"]}, "yogur_stracciatella": {"name": "Yogur stracciatella", "category": "otros", "shelfLifeDays": 12, "aliases": ["yogur stracciatela"]}, "zumo_de_naranja_sin_azucar": {"name": "Zumo de naranja sin azúcar", "category": "otros", "shelfLifeDays": 60, "aliases": ["naranja s/a 1l"]}, "zumo_tropical": {"name": "Zumo tropical", "category": "otros", "shelfLifeDays": 60, "aliases": ["zumo tropical"]}};
@@ -598,6 +653,7 @@ const OTROS_CATALOG_V3 = {"agua_mineral": {"name": "Agua mineral", "category": "
 /* ---------------- estado ---------------- */
 let inventory = [];
 let dishes = [];
+let editingDishId = null;
 
 const INV_ZONES = {
   nevera:     { label:'Nevera',     icon:`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="5" y1="10" x2="19" y2="10"/>`, color:'#2C3C52', bg:'#E2E7EF' },
@@ -610,15 +666,29 @@ const MANAGE_ORDER = ['nevera','congelador','despensa','otros'];
 
 
 const DISH_SECTIONS = {
-  comida:  { label:'Comida',          bg:'#F1ECD9', fg:'#6B5A2E' },
-  cena:    { label:'Cena',            bg:'#E1E4EE', fg:'#3A4256' },
-  general: { label:'Platos generales', bg:'#E1EBE3', fg:'#33523F' },
+  comida:  { label:'Comida', bg:'#F1ECD9', fg:'#6B5A2E' },
+  cena:    { label:'Cena',   bg:'#E1E4EE', fg:'#3A4256' },
 };
-const DISH_ORDER = ['comida','cena','general'];
+const DISH_ORDER = ['comida','cena'];
 
 /* ---------------- utilidades ---------------- */
 function normalize(s){
   return (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+}
+const PACK_QTY_OVERRIDES = { hamburguesas: 6, gouda: 12, huevos: 24 };
+const GRAMO_KEYWORDS = ['arroz','espaguetis','macarrones','gnocchi','cuscus','harina','azucar','sal fina','cafe','rigatoni'];
+function classifyUnit(slug, name){
+  if (PACK_QTY_OVERRIDES[slug] !== undefined){
+    return { unit: 'unidad', packQty: PACK_QTY_OVERRIDES[slug] };
+  }
+  const n = normalize(name);
+  if (GRAMO_KEYWORDS.some(k => n.includes(k))){
+    return { unit: 'gramo', packQty: 500 };
+  }
+  return { unit: 'unidad', packQty: 1 };
+}
+function unitLabel(unit){
+  return unit === 'gramo' ? 'g' : 'ud';
 }
 function escapeHtml(s){
   return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -645,6 +715,10 @@ function goTo(view, fromPopstate, data){
     if (data && data.category) currentInvCategory = data.category;
     renderInvDetail();
   }
+  if (view === 'dish-detail'){
+    if (data && data.dishId) currentDishId = data.dishId;
+    renderDishDetail();
+  }
   if (view === 'carrito') renderCarrito();
   if (view === 'manage-products') renderManageProducts();
   if (view === 'home') renderHome();
@@ -653,11 +727,16 @@ function goTo(view, fromPopstate, data){
   if (!fromPopstate){
     const state = { view };
     if (view === 'inv-detail') state.category = currentInvCategory;
+    if (view === 'dish-detail') state.dishId = currentDishId;
     history.pushState(state, '', '#' + view);
   }
 }
 function openInvCategory(cat){
   goTo('inv-detail', false, { category: cat });
+}
+let currentDishId = null;
+function openDishDetail(id){
+  goTo('dish-detail', false, { dishId: id });
 }
 function openOverlay(id){
   document.getElementById(id).classList.add('open');
@@ -705,6 +784,7 @@ function rerenderCurrent(){
   if (v === 'cocinar') renderCocinar();
   if (v === 'inventario') renderInventario();
   if (v === 'inv-detail') renderInvDetail();
+  if (v === 'dish-detail') renderDishDetail();
   if (v === 'carrito') renderCarrito();
   if (v === 'manage-products') renderManageProducts();
   renderHome();
@@ -718,6 +798,11 @@ async function loadAll(){
 
   onSnapshot(REF.dishes, (snap)=>{
     dishes = (snap.exists() && snap.data().items) ? snap.data().items : [];
+    let migrated = false;
+    dishes.forEach(d=>{
+      if (d.section === 'general'){ d.section = 'comida'; migrated = true; }
+    });
+    if (migrated) saveDishes();
     rerenderCurrent();
   });
 
@@ -762,6 +847,19 @@ async function loadAll(){
         Object.keys(nuevosV4).forEach(slug=>{
           if (!catalog[slug]) catalog[slug] = nuevosV4[slug];
         });
+      }
+      if (storedVersion < 5){
+        // v5: unidad (unidad/gramo) y cantidad real por compra (packQty) para calcular el inventario de verdad.
+        Object.keys(catalog).forEach(slug=>{
+          if (catalog[slug].unit === undefined){
+            const c = classifyUnit(slug, catalog[slug].name);
+            catalog[slug].unit = c.unit;
+            catalog[slug].packQty = c.packQty;
+          }
+        });
+        if (!catalog['rigatoni']){
+          catalog['rigatoni'] = { name: 'Rigatoni', category: 'despensa', shelfLifeDays: 365, aliases: ['rigatoni garofalo', 'rigatoni'], unit: 'gramo', packQty: 500 };
+        }
       }
       if (storedVersion < CATALOG_VERSION){
         await setDoc(REF.products, { catalog, version: CATALOG_VERSION });
@@ -827,9 +925,7 @@ document.getElementById('cellDespensa').onclick = ()=> openInvCategory('despensa
 
 function buildItemRow(item){
   const row = document.createElement('div');
-  const minQty = item.minQty || 1;
-  const isLow = item.quantity <= minQty;
-  row.className = 'item' + (isLow ? ' low-stock' : '');
+  row.className = 'item';
   const elapsed = daysSince(item.addedDate);
   const life = item.shelfLifeDays || 7;
   const left = life - elapsed;
@@ -837,7 +933,7 @@ function buildItemRow(item){
   row.innerHTML = `
     <div class="item-info">
       <div class="item-name">${escapeHtml(item.name)}</div>
-      <div class="item-meta${isLow ? ' low' : ''}">${isLow ? '⚠️ quedan pocas · ' : ''}${metaTxt}</div>
+      <div class="item-meta">${metaTxt}</div>
     </div>
     <div class="stepper">
       <button data-act="dec">–</button>
@@ -931,27 +1027,16 @@ function renderCocinar(){
     }
     list.forEach(dish=>{
       const times = computeTimes(dish);
-      const ingTxt = dish.ingredients.map(i=> `${escapeHtml(i.name)} ${i.quantity}${escapeHtml(i.unit||'')}`).join(' · ');
       const card = document.createElement('div');
       card.className = 'dish';
+      card.style.cursor = 'pointer';
       card.innerHTML = `
         <div class="dish-top">
-          <div style="flex:1;">
-            <div class="dish-name">${escapeHtml(dish.name)}</div>
-            <div class="dish-ing">${ingTxt}</div>
-          </div>
+          <div class="dish-name" style="flex:1;">${escapeHtml(dish.name)}</div>
           <div class="badge ${times>0?'ok':'no'}">${times>0 ? 'Puedes: ' + times + 'x' : 'Sin stock'}</div>
         </div>
-        <div class="dish-actions">
-          <button class="btn cook ${times>0?'':'warn'}" data-act="cook">Cocinar</button>
-          <button class="btn del" data-act="del">🗑</button>
-        </div>
       `;
-      card.querySelector('[data-act="cook"]').onclick = ()=> tryCook(dish);
-      card.querySelector('[data-act="del"]').onclick = ()=>{
-        dishes = dishes.filter(d=>d.id!==dish.id);
-        saveDishes(); renderCocinar(); renderHome();
-      };
+      card.onclick = ()=> openDishDetail(dish.id);
       dwrap.appendChild(card);
     });
     const addBtn = document.createElement('button');
@@ -963,15 +1048,34 @@ function renderCocinar(){
   });
 }
 
-function tryCook(dish){
+function renderDishDetail(){
+  const dish = dishes.find(d=>d.id===currentDishId);
+  if (!dish){ goTo('cocinar'); return; }
+  document.getElementById('dishDetailTitle').textContent = dish.name;
   const times = computeTimes(dish);
-  if (times > 0){ cookDish(dish); return; }
-  showConfirm(`No parece que tengas suficientes ingredientes para «${dish.name}». ¿Cocinar igualmente?`, ()=> cookDish(dish));
+  const badge = document.getElementById('dishDetailBadge');
+  badge.className = 'badge ' + (times>0 ? 'ok' : 'no');
+  badge.textContent = times>0 ? 'Puedes cocinarlo ' + times + ' veces' : 'Sin stock suficiente';
+  const list = document.getElementById('dishDetailIngredients');
+  list.innerHTML = '';
+  dish.ingredients.forEach(ing=>{
+    const row = document.createElement('div');
+    row.className = 'ing-detail-row';
+    row.innerHTML = `<span class="idname">${escapeHtml(ing.name)}</span><span class="idqty">${ing.quantity} ${escapeHtml(ing.unit||'')}</span>`;
+    list.appendChild(row);
+  });
 }
 
-function cookDish(dish){
+function tryCook(dish, servings){
+  const times = computeTimes(dish);
+  if (times > 0){ cookDish(dish, servings); return; }
+  showConfirm(`No parece que tengas suficientes ingredientes para «${dish.name}». ¿Cocinar igualmente?`, ()=> cookDish(dish, servings));
+}
+
+function cookDish(dish, servings){
+  const factor = servings || 1;
   dish.ingredients.forEach(ing=>{
-    let need = Number(ing.quantity) || 0;
+    let need = (Number(ing.quantity) || 0) * factor;
     if (need <= 0) return;
     const matches = matchesForIngredient(ing.name).sort((a,b)=> b.quantity - a.quantity);
     for (const m of matches){
@@ -986,6 +1090,7 @@ function cookDish(dish){
   saveInventory();
   toast('«' + dish.name + '» cocinado. Inventario actualizado.' + (emptied.length ? ' Añadido al carrito lo que se acabó.' : ''));
   renderCocinar();
+  renderDishDetail();
   renderHome();
 }
 
@@ -1007,27 +1112,37 @@ document.getElementById('confirmNo').onclick = ()=>{
 };
 
 /* ---------------- MODAL: nuevo plato ---------------- */
-function ingRowTemplate(){
+function ingRowTemplate(prefill){
+  const name = prefill ? escapeHtml(prefill.name) : '';
+  const qty = prefill ? prefill.quantity : '';
+  const unit = prefill ? prefill.unit : '';
   return `
     <div class="ing-row">
       <div class="ing-name-wrap">
-        <input type="text" placeholder="Escribe para buscar…" class="ing-name" autocomplete="off">
+        <input type="text" placeholder="Escribe para buscar…" class="ing-name" autocomplete="off" value="${name}" data-valid-name="${name}">
         <div class="ing-suggest"></div>
       </div>
-      <input type="number" min="0" step="0.5" placeholder="Cant." class="ing-qty">
-      <input type="text" placeholder="ud/kg/g" class="ing-unit">
+      <input type="number" min="0" step="1" placeholder="Cant." class="ing-qty" value="${qty}">
+      <span class="ing-unit-label">${unit || '—'}</span>
       <button class="rm">✕</button>
     </div>
   `;
 }
-function openDishModal(section){
-  document.getElementById('dishName').value = '';
-  document.getElementById('dishSection').value = section || 'comida';
+function openDishModal(section, editDish){
+  editingDishId = editDish ? editDish.id : null;
+  document.getElementById('dishName').value = editDish ? editDish.name : '';
+  document.getElementById('dishSection').value = editDish ? editDish.section : (section || 'comida');
   document.getElementById('dishStatus').textContent = '';
+  document.getElementById('dishOverlayTitle').textContent = editDish ? 'Editar plato' : 'Nuevo plato';
+  document.getElementById('saveDishBtn').textContent = editDish ? 'Guardar cambios' : 'Guardar plato';
   const rows = document.getElementById('ingRows');
   rows.innerHTML = '';
-  rows.insertAdjacentHTML('beforeend', ingRowTemplate());
-  rows.insertAdjacentHTML('beforeend', ingRowTemplate());
+  if (editDish && editDish.ingredients.length > 0){
+    editDish.ingredients.forEach(ing=> rows.insertAdjacentHTML('beforeend', ingRowTemplate(ing)));
+  } else {
+    rows.insertAdjacentHTML('beforeend', ingRowTemplate());
+    rows.insertAdjacentHTML('beforeend', ingRowTemplate());
+  }
   bindIngRowRemovers();
   bindIngAutocomplete();
   openOverlay('dishOverlay');
@@ -1044,8 +1159,12 @@ function bindIngAutocomplete(){
   document.querySelectorAll('#ingRows .ing-name').forEach(input=>{
     if (input.dataset.bound) return;
     input.dataset.bound = '1';
+    const row = input.closest('.ing-row');
     const suggestBox = input.closest('.ing-name-wrap').querySelector('.ing-suggest');
+    const qtyInput = row.querySelector('.ing-qty');
+    const unitLabelEl = row.querySelector('.ing-unit-label');
     input.addEventListener('input', ()=>{
+      input.dataset.validName = '';
       const q = normalize(input.value);
       suggestBox.innerHTML = '';
       if (!q){ suggestBox.classList.remove('open'); return; }
@@ -1057,11 +1176,14 @@ function bindIngAutocomplete(){
       matches.forEach(p=>{
         const opt = document.createElement('div');
         opt.className = 'opt';
-        opt.textContent = p.name;
+        opt.textContent = p.name + ' (' + unitLabel(p.unit || 'unidad') + ')';
         opt.onmousedown = (e)=>{
           e.preventDefault();
           input.value = p.name;
           input.dataset.validName = p.name;
+          const u = p.unit || 'unidad';
+          unitLabelEl.textContent = unitLabel(u);
+          qtyInput.step = (u === 'gramo') ? '0.1' : '1';
           suggestBox.classList.remove('open');
         };
         suggestBox.appendChild(opt);
@@ -1069,6 +1191,15 @@ function bindIngAutocomplete(){
       suggestBox.classList.add('open');
     });
     input.addEventListener('blur', ()=> setTimeout(()=> suggestBox.classList.remove('open'), 150));
+    // si la fila viene precargada (editar plato), fija la unidad ya conocida
+    if (input.dataset.validName){
+      const match = Object.values(catalog).find(p => p.name === input.dataset.validName);
+      if (match){
+        const u = match.unit || 'unidad';
+        unitLabelEl.textContent = unitLabel(u);
+        qtyInput.step = (u === 'gramo') ? '0.1' : '1';
+      }
+    }
   });
 }
 document.getElementById('addIngRow').onclick = ()=>{
@@ -1089,11 +1220,10 @@ document.getElementById('saveDishBtn').onclick = ()=>{
     const nameInput = row.querySelector('.ing-name');
     const iname = nameInput.value.trim();
     const qty = Number(row.querySelector('.ing-qty').value) || 0;
-    const unit = row.querySelector('.ing-unit').value.trim();
     if (!iname || qty <= 0) return;
     const match = Object.values(catalog).find(p => normalize(p.name) === normalize(iname));
     if (!match){ invalidNames.push(iname); return; }
-    ingredients.push({ name: match.name, quantity: qty, unit: unit || 'ud' });
+    ingredients.push({ name: match.name, quantity: qty, unit: unitLabel(match.unit || 'unidad') });
   });
   if (invalidNames.length > 0){
     statusEl.textContent = 'Elige el ingrediente de la lista que aparece al escribir: ' + invalidNames.join(', ');
@@ -1102,11 +1232,17 @@ document.getElementById('saveDishBtn').onclick = ()=>{
   }
   if (ingredients.length === 0){ statusEl.textContent = 'Añade al menos un ingrediente con cantidad.'; statusEl.classList.add('error'); return; }
 
-  dishes.push({ id: 'dish_' + Date.now(), name, section, ingredients });
+  if (editingDishId){
+    const d = dishes.find(x=>x.id===editingDishId);
+    if (d){ d.name = name; d.section = section; d.ingredients = ingredients; }
+    editingDishId = null;
+  } else {
+    dishes.push({ id: 'dish_' + Date.now(), name, section, ingredients });
+  }
   saveDishes();
   closeOverlay('dishOverlay');
   renderCocinar(); renderHome();
-  toast('Plato «' + name + '» añadido.');
+  toast('Plato «' + name + '» guardado.');
 };
 
 /* ---------------- MODAL: ticket ---------------- */
@@ -1179,9 +1315,11 @@ function recognizeTicketText(rawText){
       }
     });
     if (count > 0){
+      const packQty = prod.packQty || 1;
       found.push({
         slug, name: prod.name, category: prod.category,
-        shelfLifeDays: prod.shelfLifeDays, quantity: count, packSize: prod.packSize || null
+        shelfLifeDays: prod.shelfLifeDays, quantity: count * packQty,
+        unit: prod.unit || 'unidad', packSize: prod.packQty > 1 ? prod.packQty : null
       });
     }
   });
@@ -1304,13 +1442,15 @@ function renderTicketReview(){
   pendingTicketItems.forEach((item, idx)=>{
     const row = document.createElement('div');
     row.className = 'review-row';
+    const step = item.unit === 'gramo' ? '0.1' : '1';
     row.innerHTML = `
       <input type="checkbox" checked class="rchk" data-idx="${idx}">
       <div class="rname">${escapeHtml(item.name)}${item.packSize ? ' (pack de '+item.packSize+')' : ''}</div>
       <span class="rcat">${item.category}</span>
-      <input type="number" min="1" value="${item.quantity}" class="rqty" data-idx="${idx}">
+      <input type="number" min="0" step="${step}" value="${item.quantity}" class="rqty" data-idx="${idx}">
+      <span class="rcat">${unitLabel(item.unit)}</span>
     `;
-    row.querySelector('.rqty').oninput = (e)=>{ pendingTicketItems[idx].quantity = Number(e.target.value) || 1; };
+    row.querySelector('.rqty').oninput = (e)=>{ pendingTicketItems[idx].quantity = Number(e.target.value) || 0; };
     list.appendChild(row);
   });
   wrap.style.display = 'block';
@@ -1338,7 +1478,7 @@ document.getElementById('ticketConfirmBtn').addEventListener('click', ()=>{
     } else {
       inventory.push({
         id: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
-        name: item.name, quantity: item.quantity, unit: 'ud', category: item.category,
+        name: item.name, quantity: item.quantity, unit: unitLabel(item.unit), category: item.category,
         addedDate: new Date().toISOString(),
         shelfLifeDays: item.shelfLifeDays
       });
@@ -1515,10 +1655,12 @@ document.getElementById('openInvAddBtn').onclick = ()=>{
     row.className = 'product-pick-row';
     row.textContent = p.name;
     row.onclick = ()=>{
-      invAddSelected = { name: p.name, category: cat, shelfLifeDays: p.shelfLifeDays };
+      invAddSelected = { name: p.name, category: cat, shelfLifeDays: p.shelfLifeDays, unit: p.unit || 'unidad' };
       document.getElementById('invAddStepProduct').style.display = 'none';
       document.getElementById('invAddStepQty').style.display = 'block';
       document.getElementById('invAddSelectedName').textContent = p.name;
+      document.getElementById('invAddUnitLabel').textContent = unitLabel(p.unit || 'unidad');
+      document.getElementById('invAddQty').step = (p.unit === 'gramo') ? '0.1' : '1';
       document.getElementById('invAddQty').value = 1;
     };
     list.appendChild(row);
@@ -1535,7 +1677,7 @@ document.getElementById('invBackToProductStep').onclick = (e)=>{
 };
 document.getElementById('invAddConfirmBtn').onclick = ()=>{
   if (!invAddSelected) return;
-  const qty = Number(document.getElementById('invAddQty').value) || 1;
+  const qty = Number(document.getElementById('invAddQty').value) || 0;
   const normalized = normalize(invAddSelected.name);
   const existing = inventory.find(i => normalize(i.name) === normalized && i.category === invAddSelected.category);
   if (existing){
@@ -1544,7 +1686,7 @@ document.getElementById('invAddConfirmBtn').onclick = ()=>{
   } else {
     inventory.push({
       id: 'item_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
-      name: invAddSelected.name, quantity: qty, unit: 'ud', category: invAddSelected.category,
+      name: invAddSelected.name, quantity: qty, unit: unitLabel(invAddSelected.unit), category: invAddSelected.category,
       addedDate: new Date().toISOString(),
       shelfLifeDays: invAddSelected.shelfLifeDays || 14
     });
@@ -1584,13 +1726,18 @@ function renderManageProducts(){
     entries.forEach(([slug, p])=>{
       const row = document.createElement('div');
       row.className = 'manage-row';
+      const packTxt = (p.packQty && p.packQty != 1) ? ' · trae ' + p.packQty + ' ' + unitLabel(p.unit||'unidad') : '';
       row.innerHTML = `
         <div class="mname">${escapeHtml(p.name)}${p.packSize ? ' (pack de '+p.packSize+')' : ''}</div>
-        <div class="mlife">${p.shelfLifeDays}d</div>
+        <div class="mlife">${p.shelfLifeDays}d · ${unitLabel(p.unit||'unidad')}${packTxt}</div>
+        <button class="icon-btn" data-act="edit">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+        </button>
         <button class="icon-btn" data-act="del">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
         </button>
       `;
+      row.querySelector('[data-act="edit"]').onclick = ()=> openEditProductModal(slug);
       row.querySelector('[data-act="del"]').onclick = ()=>{
         showConfirm('¿Borrar «' + p.name + '» del diccionario de productos? Dejará de reconocerse en tickets futuros.', ()=>{
           delete catalog[slug];
@@ -1604,10 +1751,28 @@ function renderManageProducts(){
   });
 }
 
+let editingProductSlug = null;
+function openEditProductModal(slug){
+  editingProductSlug = slug;
+  const p = catalog[slug];
+  document.getElementById('addProductTitle').textContent = 'Editar producto';
+  document.getElementById('newProductName').value = p.name;
+  document.getElementById('newProductCategory').value = p.category;
+  document.getElementById('newProductShelfLife').value = p.shelfLifeDays;
+  document.getElementById('newProductUnit').value = p.unit || 'unidad';
+  document.getElementById('newProductPackQty').value = p.packQty || 1;
+  document.getElementById('newProductStatus').textContent = '';
+  openOverlay('addProductOverlay');
+}
+
 document.getElementById('openAddProductBtn').onclick = ()=>{
+  editingProductSlug = null;
+  document.getElementById('addProductTitle').textContent = 'Nuevo producto';
   document.getElementById('newProductName').value = '';
   document.getElementById('newProductCategory').value = 'nevera';
   document.getElementById('newProductShelfLife').value = 7;
+  document.getElementById('newProductUnit').value = 'unidad';
+  document.getElementById('newProductPackQty').value = 1;
   document.getElementById('newProductStatus').textContent = '';
   openOverlay('addProductOverlay');
 };
@@ -1616,20 +1781,71 @@ document.getElementById('saveNewProductBtn').onclick = ()=>{
   const name = document.getElementById('newProductName').value.trim();
   const category = document.getElementById('newProductCategory').value;
   const shelfLifeDays = Number(document.getElementById('newProductShelfLife').value) || 7;
+  const unit = document.getElementById('newProductUnit').value;
+  const packQty = Number(document.getElementById('newProductPackQty').value) || 1;
   const statusEl = document.getElementById('newProductStatus');
   if (!name){
     statusEl.textContent = 'Ponle un nombre al producto.';
     statusEl.classList.add('error');
     return;
   }
-  let slug = normalize(name).replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
-  if (!slug) slug = 'producto_' + Date.now();
-  if (catalog[slug]) slug = slug + '_' + Date.now().toString(36).slice(-4);
-  catalog[slug] = { name, category, shelfLifeDays, aliases: [normalize(name)] };
+  if (editingProductSlug){
+    const p = catalog[editingProductSlug];
+    p.name = name; p.category = category; p.shelfLifeDays = shelfLifeDays; p.unit = unit; p.packQty = packQty;
+  } else {
+    let slug = normalize(name).replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+    if (!slug) slug = 'producto_' + Date.now();
+    if (catalog[slug]) slug = slug + '_' + Date.now().toString(36).slice(-4);
+    catalog[slug] = { name, category, shelfLifeDays, unit, packQty, aliases: [normalize(name)] };
+  }
   saveCatalog();
   closeOverlay('addProductOverlay');
   renderManageProducts();
-  toast('«' + name + '» añadido al diccionario de productos');
+  toast('«' + name + '» guardado en el diccionario de productos');
+  editingProductSlug = null;
+};
+
+/* ---------------- DETALLE DE PLATO: cocinar con comensales y menú ---------------- */
+document.getElementById('dishDetailCookBtn').onclick = ()=>{
+  document.getElementById('dishMenuDropdown').style.display = 'none';
+  openOverlay('servingsOverlay');
+};
+document.getElementById('servings1Btn').onclick = ()=>{
+  closeOverlay('servingsOverlay');
+  const dish = dishes.find(d=>d.id===currentDishId);
+  if (dish) tryCook(dish, 1);
+};
+document.getElementById('servings2Btn').onclick = ()=>{
+  closeOverlay('servingsOverlay');
+  const dish = dishes.find(d=>d.id===currentDishId);
+  if (dish) tryCook(dish, 2);
+};
+document.getElementById('dishMenuBtn').onclick = (e)=>{
+  e.stopPropagation();
+  const dd = document.getElementById('dishMenuDropdown');
+  dd.style.display = (dd.style.display === 'none') ? 'block' : 'none';
+};
+document.addEventListener('click', (e)=>{
+  const dd = document.getElementById('dishMenuDropdown');
+  if (dd.style.display !== 'none' && !e.target.closest('#dishMenuBtn') && !e.target.closest('#dishMenuDropdown')){
+    dd.style.display = 'none';
+  }
+});
+document.getElementById('dishMenuEdit').onclick = ()=>{
+  document.getElementById('dishMenuDropdown').style.display = 'none';
+  const dish = dishes.find(d=>d.id===currentDishId);
+  if (dish) openDishModal(dish.section, dish);
+};
+document.getElementById('dishMenuDelete').onclick = ()=>{
+  document.getElementById('dishMenuDropdown').style.display = 'none';
+  const dish = dishes.find(d=>d.id===currentDishId);
+  if (!dish) return;
+  showConfirm('¿Eliminar el plato «' + dish.name + '»? No se puede deshacer.', ()=>{
+    dishes = dishes.filter(d=>d.id!==dish.id);
+    saveDishes();
+    toast('Plato eliminado.');
+    history.back();
+  });
 };
 
 /* ---------------- init ---------------- */
