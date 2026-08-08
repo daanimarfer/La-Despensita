@@ -301,6 +301,11 @@
   }
   .modal .btn-save:disabled{ opacity:.5; }
   .modal .cat-pick{ width:auto; flex:1; margin-top:0; padding:16px 6px; font-size:14px; }
+  .servings-pick{
+    flex:1; padding:16px 6px; border-radius:12px; border:2px solid var(--line); background:var(--bg);
+    color:var(--ink); font-weight:700; font-size:14px; cursor:pointer;
+  }
+  .servings-pick.selected{ background:var(--accent); border-color:var(--accent); color:#fff; }
   .product-pick-row{
     padding:11px 10px; border-bottom:1px solid var(--line); font-size:14px; font-weight:600;
     cursor:pointer; color:var(--ink);
@@ -312,11 +317,11 @@
   }
   .manage-row .mname{ flex:1; font-size:14px; font-weight:600; min-width:0; }
   .manage-row .mlife{ font-size:11px; color:var(--ink-dim); }
-  .modal .close-x{
+  .modal .close-x, .confirm-box .close-x{
     position:absolute; top:16px; right:16px; border:none; background:var(--bg); width:30px;height:30px;
     border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-dim);
   }
-  .modal .modal-back{
+  .modal .modal-back, .confirm-box .modal-back{
     position:absolute; top:16px; left:16px; border:none; background:var(--bg); width:30px;height:30px;
     border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--ink-dim);
   }
@@ -332,7 +337,7 @@
   .confirm-overlay.open{ display:flex; animation: overlayFadeIn 0.2s ease; }
   .confirm-box{
     background:#fff; border-radius:16px; padding:20px; max-width:340px; text-align:center;
-    animation: modalSlideUp 0.22s ease;
+    animation: modalSlideUp 0.22s ease; position:relative; padding-top:44px;
   }
   .confirm-box p{ font-size:14px; margin:0 0 16px; color:var(--ink); }
   .confirm-actions{ display:flex; gap:8px; }
@@ -399,13 +404,16 @@
   </div>
 
   <!-- MODAL: para cuántas personas -->
-  <div class="confirm-overlay" id="servingsOverlay">
-    <div class="confirm-box">
-      <p style="font-weight:800; font-size:16px;">¿Para cuántas personas?</p>
-      <div class="confirm-actions">
-        <button class="no" id="servings1Btn">Solo yo (x1)</button>
-        <button class="yes" id="servings2Btn" style="background:var(--accent);">Los dos (x2)</button>
+  <div class="overlay" id="servingsOverlay">
+    <div class="modal">
+      <button class="modal-back" data-close="servingsOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="close-x" data-close="servingsOverlay">✕</button>
+      <h3>¿Para cuántas personas?</h3>
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button class="servings-pick selected" data-servings="1">1 persona</button>
+        <button class="servings-pick" data-servings="2">2 personas</button>
       </div>
+      <button class="btn-save" id="servingsConfirmBtn">Cocinar</button>
     </div>
   </div>
 
@@ -612,6 +620,7 @@
   <!-- confirm cocinar sin stock -->
   <div class="confirm-overlay" id="confirmOverlay">
     <div class="confirm-box">
+      <button class="modal-back" data-close="confirmOverlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <p id="confirmText"></p>
       <div class="confirm-actions">
         <button class="no" id="confirmNo">Cancelar</button>
@@ -890,7 +899,7 @@ async function saveCart(){
   catch(e){ toast('No se pudo guardar el carrito.', true); }
 }
 async function saveCatalog(){
-  try{ await setDoc(REF.products, { catalog }); }
+  try{ await setDoc(REF.products, { catalog, version: CATALOG_VERSION }); }
   catch(e){ toast('No se pudo guardar el diccionario de productos.', true); }
 }
 function addToCart(name, auto, quantity, category){
@@ -1789,9 +1798,25 @@ document.getElementById('saveNewProductBtn').onclick = ()=>{
     statusEl.classList.add('error');
     return;
   }
+  let invUpdated = 0;
   if (editingProductSlug){
     const p = catalog[editingProductSlug];
+    const oldName = p.name;
+    const oldCategory = p.category;
     p.name = name; p.category = category; p.shelfLifeDays = shelfLifeDays; p.unit = unit; p.packQty = packQty;
+
+    if (oldName !== name || oldCategory !== category){
+      const oldNorm = normalize(oldName);
+      inventory.forEach(item=>{
+        if (normalize(item.name) === oldNorm && item.category === oldCategory){
+          item.name = name;
+          item.category = category;
+          item.unit = unitLabel(unit);
+          invUpdated++;
+        }
+      });
+      if (invUpdated > 0) saveInventory();
+    }
   } else {
     let slug = normalize(name).replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
     if (!slug) slug = 'producto_' + Date.now();
@@ -1801,24 +1826,29 @@ document.getElementById('saveNewProductBtn').onclick = ()=>{
   saveCatalog();
   closeOverlay('addProductOverlay');
   renderManageProducts();
-  toast('«' + name + '» guardado en el diccionario de productos');
+  renderInventario(); renderInvDetail(); renderHome();
+  toast('«' + name + '» guardado' + (invUpdated ? ' · actualizado también en tu inventario' : ''));
   editingProductSlug = null;
 };
 
 /* ---------------- DETALLE DE PLATO: cocinar con comensales y menú ---------------- */
+let selectedServings = 1;
 document.getElementById('dishDetailCookBtn').onclick = ()=>{
   document.getElementById('dishMenuDropdown').style.display = 'none';
+  selectedServings = 1;
+  document.querySelectorAll('.servings-pick').forEach(b=> b.classList.toggle('selected', b.dataset.servings === '1'));
   openOverlay('servingsOverlay');
 };
-document.getElementById('servings1Btn').onclick = ()=>{
+document.querySelectorAll('.servings-pick').forEach(btn=>{
+  btn.onclick = ()=>{
+    selectedServings = Number(btn.dataset.servings);
+    document.querySelectorAll('.servings-pick').forEach(b=> b.classList.toggle('selected', b===btn));
+  };
+});
+document.getElementById('servingsConfirmBtn').onclick = ()=>{
   closeOverlay('servingsOverlay');
   const dish = dishes.find(d=>d.id===currentDishId);
-  if (dish) tryCook(dish, 1);
-};
-document.getElementById('servings2Btn').onclick = ()=>{
-  closeOverlay('servingsOverlay');
-  const dish = dishes.find(d=>d.id===currentDishId);
-  if (dish) tryCook(dish, 2);
+  if (dish) tryCook(dish, selectedServings);
 };
 document.getElementById('dishMenuBtn').onclick = (e)=>{
   e.stopPropagation();
