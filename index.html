@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>La Despensita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -24,6 +27,23 @@
     --warn:#C9762A;
     --warn-dim:#F7E7D6;
     --danger:#C0392B;
+
+    /* paleta "cottage" para Inicio y Carrito */
+    --cot-bg:#F8F1E4;
+    --cot-ink:#4A3B2E;
+    --cot-ink-soft:#8A7A66;
+    --cot-cocinar-bg:#DCE8D3;
+    --cot-cocinar-fg:#3E5C43;
+    --cot-inventario-bg:#D9E3EF;
+    --cot-inventario-fg:#38506B;
+    --cot-carrito-bg:#F3E2C7;
+    --cot-carrito-fg:#8A6535;
+    --cot-header-bg:#F0E1C4;
+    --cot-paper:#FBF7EC;
+    --cot-line:#DCC9A3;
+    --font-script:'Caveat', cursive;
+    --font-round:'Baloo 2', sans-serif;
+    --font-body:'Quicksand', sans-serif;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
@@ -45,6 +65,53 @@
   .topbar h2{ font-size:20px; margin:0; font-weight:700; }
   .topbar .spacer{ flex:1; }
 
+  /* ---- CARRITO: estilo cottage ---- */
+  #view-carrito.active{ background:var(--cot-bg); min-height:100vh; margin:0 -16px -90px; padding:0 0 34px; }
+  .cot-topbar{
+    display:flex; align-items:center; gap:10px; padding:20px 18px 14px; background:var(--cot-header-bg);
+  }
+  .cot-back, .cot-plus{
+    width:34px; height:34px; border-radius:50%; border:none; background:rgba(255,255,255,0.7);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--cot-ink); flex-shrink:0;
+  }
+  .cot-topbar h2{ flex:1; font-family:var(--font-round); font-size:18px; font-weight:700; color:var(--cot-ink); margin:0; }
+  .cot-clipboard-wrap{ position:relative; padding:0 22px; margin-top:6px; }
+  .cot-clip{ display:block; width:80px; margin:0 auto; position:relative; z-index:2; }
+  .cot-paperclip{ position:absolute; left:14px; top:22px; width:22px; z-index:2; }
+  .cot-paper{
+    position:relative; background:var(--cot-paper); border:1px solid var(--cot-line); border-radius:4px 4px 14px 14px;
+    padding:26px 20px 20px; margin-top:-14px; box-shadow:0 3px 10px rgba(74,59,46,0.1);
+    background-image:repeating-linear-gradient(to bottom, transparent, transparent 33px, var(--cot-line) 34px);
+  }
+  .cot-lemon{ position:absolute; top:-6px; right:14px; width:44px; z-index:2; }
+  .cot-leaf-sprig{ position:absolute; bottom:6px; right:10px; width:40px; opacity:.9; }
+  .cot-paper-title{ font-family:var(--font-script); font-size:24px; color:var(--cot-ink); margin-bottom:10px; }
+  .cot-paper-title .cot-heart{ color:#D98A8A; }
+  .cot-checklist{ min-height:20px; }
+  .cot-check-row{ display:flex; align-items:center; gap:10px; padding:6px 0; min-height:34px; }
+  .cot-checkbox{
+    width:20px; height:20px; border:2.2px solid var(--cot-ink-soft); border-radius:5px; background:transparent;
+    cursor:pointer; flex-shrink:0; padding:0;
+  }
+  .cot-check-row .cname{ font-family:var(--font-script); font-size:19px; color:var(--cot-ink); flex:1; min-width:0; line-height:1.1; }
+  .cot-check-row .ctag{
+    font-family:var(--font-body); font-size:10px; font-weight:700; color:#fff; background:var(--warn);
+    padding:2px 7px; border-radius:20px; flex-shrink:0;
+  }
+  .cot-check-row .cdel{ border:none; background:transparent; color:var(--cot-ink-soft); cursor:pointer; padding:3px; flex-shrink:0; }
+  .cot-sticky-note{
+    float:right; width:74px; margin:0 -4px 8px 10px; background:#F6D9C9; border-radius:3px; padding:10px 8px;
+    text-align:center; box-shadow:0 2px 6px rgba(74,59,46,0.15); transform:rotate(3deg);
+  }
+  .cot-sticky-note .cot-note-txt{ font-family:var(--font-script); font-size:15px; color:#7A4A3A; line-height:1.15; }
+  .cot-empty-note{ font-family:var(--font-body); font-size:13px; color:var(--cot-ink-soft); padding:8px 0; }
+  .cot-add-pill{
+    display:block; margin:20px auto 0; padding:12px 26px; border:none; border-radius:24px;
+    background:var(--cot-header-bg); color:var(--cot-ink); font-family:var(--font-round); font-size:15px;
+    font-weight:700; cursor:pointer; box-shadow:0 2px 6px rgba(74,59,46,0.12);
+  }
+  .cot-scene2{ display:block; width:100%; max-width:320px; margin:26px auto 0; }
+
   .view{ display:none; padding:0 16px; }
   .view.active{ display:block; animation: viewSlideIn 0.25s ease; }
   @keyframes viewSlideIn{
@@ -54,23 +121,39 @@
 
   /* ---- HOME: dos mitades a pantalla completa ---- */
   #view-home.active{
-    display:flex; flex-direction:column; position:absolute; inset:0; z-index:1; padding:0;
+    display:block; background:var(--cot-bg); min-height:100vh; margin:0 -16px -90px;
+    padding:22px 20px 40px;
   }
-  .half{
-    flex:1; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:3px; cursor:pointer; position:relative; text-align:center; padding:12px;
+  .cot-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; }
+  .cot-title{ font-family:var(--font-script); font-size:34px; font-weight:700; color:var(--cot-ink); line-height:1; }
+  .cot-title .cot-heart{ color:#D98A8A; }
+  .cot-gear{
+    border:none; background:rgba(255,255,255,0.7); width:38px; height:38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--cot-ink);
+    box-shadow:0 1px 4px rgba(74,59,46,0.12);
   }
-  .half:active{ filter:brightness(0.96); }
-  .half.cocinar{ background:#E4EEE8; color:#2F4A3B; }
-  .half.inventario{ background:#E2E7EF; color:#2C3C52; }
-  .half.carrito{ background:#EFE6DC; color:#69493A; }
-  .half .brand{
-    position:absolute; top:16px; left:22px; right:64px; font-size:12px; font-weight:800; letter-spacing:.01em;
-    color:inherit; opacity:.75; line-height:1.25;
+  .cot-gear:active{ transform:scale(0.92); }
+  .cot-greeting{ font-family:var(--font-script); font-size:22px; color:var(--cot-ink); margin:2px 0 18px; }
+  .cot-card{
+    display:flex; align-items:center; gap:14px; border-radius:22px; padding:16px 18px;
+    margin-bottom:14px; cursor:pointer; box-shadow:0 2px 8px rgba(74,59,46,0.08);
   }
-  .half .half-icon{ margin-bottom:2px; }
-  .half .half-label{ font-size:21px; font-weight:800; }
-  .half .half-sub{ font-size:12px; opacity:.7; font-weight:500; }
+  .cot-card:active{ filter:brightness(0.97); }
+  .cot-card.cocinar{ background:var(--cot-cocinar-bg); color:var(--cot-cocinar-fg); }
+  .cot-card.inventario{ background:var(--cot-inventario-bg); color:var(--cot-inventario-fg); }
+  .cot-card.carrito{ background:var(--cot-carrito-bg); color:var(--cot-carrito-fg); }
+  .cot-card-icon{ flex-shrink:0; width:56px; height:56px; }
+  .cot-card-text{ flex:1; min-width:0; }
+  .cot-card-title{ font-family:var(--font-round); font-size:21px; font-weight:700; }
+  .cot-card-sub{ font-family:var(--font-body); font-size:13px; font-weight:600; opacity:.75; margin-top:1px; }
+  .cot-chevron{ flex-shrink:0; opacity:.6; }
+  .cot-scene{ position:relative; margin-top:26px; height:120px; }
+  .cot-plant{ position:absolute; left:0; bottom:0; width:92px; height:112px; }
+  .cot-cat{
+    position:absolute; right:6px; bottom:0; width:120px; height:100px; border:none; background:transparent;
+    cursor:pointer; padding:0;
+  }
+  .cot-cat:active{ transform:scale(0.96); }
 
   /* ---- COCINAR: 3 zonas a pantalla completa ---- */
   #view-cocinar.active{
@@ -369,19 +452,95 @@
 
   <!-- HOME -->
   <div id="view-home" class="view active">
-    <div class="half cocinar" id="goCocinar">
-      <div class="brand">Bienvenido a La Despensita</div>
-      <svg class="half-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M2 12h20"/><path d="M12 4v2"/><path d="M8 4l.5 2"/><path d="M16 4l-.5 2"/></svg>
-      <div class="half-label">Cocinar</div>
+    <div class="cot-header">
+      <div class="cot-title">La Despensita <span class="cot-heart">♡</span></div>
+      <button class="cot-gear" id="gearBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
     </div>
-    <div class="half inventario" id="goInventario">
-      <svg class="half-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="8" y1="7" x2="8" y2="9"/><line x1="8" y1="15" x2="8" y2="17"/></svg>
-      <div class="half-label">Inventario</div>
+    <div class="cot-greeting" id="cotGreeting">¡Buenos días! ☀️</div>
+
+    <div class="cot-card cocinar" id="goCocinar">
+      <svg class="cot-card-icon" viewBox="0 0 60 60">
+        <path d="M20 14 Q17 9 20 4" stroke="#3E5C43" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M30 12 Q27 6 30 0" stroke="#3E5C43" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M40 14 Q37 9 40 4" stroke="#3E5C43" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="30" cy="26" rx="17" ry="4.5" fill="#6BA377" stroke="#3E5C43" stroke-width="2"/>
+        <circle cx="30" cy="21" r="2.6" fill="#3E5C43"/>
+        <rect x="8" y="27" width="44" height="24" rx="9" fill="#5E9068" stroke="#3E5C43" stroke-width="2.3"/>
+        <rect x="1" y="33" width="10" height="7" rx="3.5" fill="#5E9068" stroke="#3E5C43" stroke-width="2.3"/>
+        <rect x="49" y="33" width="10" height="7" rx="3.5" fill="#5E9068" stroke="#3E5C43" stroke-width="2.3"/>
+      </svg>
+      <div class="cot-card-text">
+        <div class="cot-card-title">Cocinar</div>
+        <div class="cot-card-sub">Recetas y menús</div>
+      </div>
+      <svg class="cot-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
     </div>
-    <div class="half carrito" id="goCarrito">
-      <svg class="half-icon" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 7H6"/></svg>
-      <div class="half-label">Carrito</div>
-      <div class="half-sub" id="carritoSub">0 cosas por comprar</div>
+
+    <div class="cot-card inventario" id="goInventario">
+      <svg class="cot-card-icon" viewBox="0 0 60 60">
+        <rect x="4" y="20" width="26" height="13" rx="3" fill="#EDE6D3" stroke="#38506B" stroke-width="2"/>
+        <rect x="6" y="30" width="22" height="24" rx="6" fill="#FBF7EC" stroke="#38506B" stroke-width="2.3"/>
+        <line x1="9" y1="38" x2="25" y2="38" stroke="#B9C6D8" stroke-width="2"/>
+        <path d="M32 54 L52 54 L46 26 Z" fill="#E8B94A" stroke="#8A6535" stroke-width="2.2" stroke-linejoin="round"/>
+        <circle cx="41" cy="46" r="2" fill="#8A6535"/>
+        <circle cx="46" cy="38" r="1.6" fill="#8A6535"/>
+        <circle cx="37" cy="40" r="1.4" fill="#8A6535"/>
+      </svg>
+      <div class="cot-card-text">
+        <div class="cot-card-title">Inventario</div>
+        <div class="cot-card-sub">Tu despensa</div>
+      </div>
+      <svg class="cot-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+    </div>
+
+    <div class="cot-card carrito" id="goCarrito">
+      <svg class="cot-card-icon" viewBox="0 0 60 60">
+        <path d="M14 26 Q30 6 46 26" fill="none" stroke="#A9773F" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M10 28 L14 54 Q30 60 46 54 L50 28 Z" fill="#D9A85E" stroke="#8A6535" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M14 34 L46 34 M13 41 L47 41 M14 48 L46 48" stroke="#8A6535" stroke-width="1.4" opacity="0.55"/>
+        <path d="M8 32 Q30 24 52 32 L50 40 Q30 34 10 40 Z" fill="#F1CFCF" stroke="#C98B8B" stroke-width="1.8"/>
+        <path d="M20 26 q-2 -8 4 -10" stroke="#5E9068" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <path d="M30 24 q0 -9 6 -11" stroke="#5E9068" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <circle cx="27" cy="24" r="4" fill="#C2503D"/>
+      </svg>
+      <div class="cot-card-text">
+        <div class="cot-card-title">Carrito</div>
+        <div class="cot-card-sub" id="carritoSub">Lista de la compra</div>
+      </div>
+      <svg class="cot-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+    </div>
+
+    <div class="cot-scene">
+      <svg class="cot-plant" viewBox="0 0 92 112">
+        <path d="M20 98 L26 70 L58 70 L64 98 Z" fill="#C97A4A" stroke="#8A4E2A" stroke-width="2.3" stroke-linejoin="round"/>
+        <ellipse cx="42" cy="70" rx="19" ry="4.5" fill="#A9622F" stroke="#8A4E2A" stroke-width="1.6"/>
+        <g stroke="#4E7856" stroke-width="3" fill="none" stroke-linecap="round">
+          <path d="M40 68 C 30 55, 14 50, 4 36"/>
+          <path d="M42 66 C 38 48, 40 30, 46 14"/>
+          <path d="M44 68 C 54 54, 68 50, 82 40"/>
+        </g>
+        <ellipse cx="4" cy="34" rx="7" ry="4" fill="#6BA377" transform="rotate(-35 4 34)"/>
+        <ellipse cx="46" cy="13" rx="7" ry="4.5" fill="#6BA377" transform="rotate(-6 46 13)"/>
+        <ellipse cx="83" cy="39" rx="7" ry="4" fill="#6BA377" transform="rotate(30 83 39)"/>
+        <ellipse cx="22" cy="52" rx="5.5" ry="3.2" fill="#6BA377" transform="rotate(-40 22 52)"/>
+        <ellipse cx="62" cy="50" rx="5.5" ry="3.2" fill="#6BA377" transform="rotate(35 62 50)"/>
+      </svg>
+      <button class="cot-cat" id="fabAdd" aria-label="Añadir ticket">
+        <svg viewBox="0 0 140 100">
+          <path d="M8 78 Q4 40 44 34 Q40 20 56 14 Q52 26 62 30 Q96 34 100 66 Q102 82 84 84 Q50 90 22 86 Q8 84 8 78 Z"
+                fill="#E5A85C" stroke="#A9622F" stroke-width="2.4" stroke-linejoin="round"/>
+          <path d="M18 80 Q34 88 58 84 Q40 76 30 62 Q16 66 18 80 Z" fill="#FBF3E4" stroke="#A9622F" stroke-width="2"/>
+          <path d="M46 20 L54 30 L40 32 Z" fill="#E5A85C" stroke="#A9622F" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M58 16 L68 24 L56 28 Z" fill="#E5A85C" stroke="#A9622F" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M40 34 q6 4 14 2" stroke="#A9622F" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M60 60 q10 4 8 16" stroke="#E5A85C" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path d="M64 42 q6 1 8 6" stroke="#C98A4A" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M70 54 q6 1 7 7" stroke="#C98A4A" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M104 18 C 100 10, 88 12, 88 20 C 88 12, 76 10, 72 18 C 72 28, 88 36, 88 36 C 88 36, 104 28, 104 18 Z" fill="#E39494"/>
+        </svg>
+      </button>
     </div>
   </div>
 
@@ -429,14 +588,44 @@
 
   <!-- CARRITO -->
   <div id="view-carrito" class="view">
-    <div class="topbar">
-      <button class="back" data-go="home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="cot-topbar">
+      <button class="cot-back" data-go="home"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
       <h2>Carrito de la compra</h2>
+      <button class="cot-plus" id="openCartAddBtnTop">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
     </div>
-    <div style="padding:0 16px 14px;">
-      <button class="add-inline" id="openCartAddBtn" style="border-color:var(--line); color:var(--ink-dim);">+ &nbsp;Añadir producto</button>
+
+    <div class="cot-clipboard-wrap">
+      <svg class="cot-paperclip" viewBox="0 0 30 50"><path d="M10 6 Q24 6 24 20 L24 36 Q24 46 14 46 Q6 46 6 38 L6 16" fill="none" stroke="#A9A9A9" stroke-width="3" stroke-linecap="round"/></svg>
+      <svg class="cot-clip" viewBox="0 0 80 40"><rect x="10" y="6" width="60" height="20" rx="8" fill="#C9A46A" stroke="#8A6535" stroke-width="2"/><circle cx="40" cy="16" r="5" fill="#FBF7EC" stroke="#8A6535" stroke-width="2"/></svg>
+      <div class="cot-paper">
+        <svg class="cot-lemon" viewBox="0 0 50 50"><ellipse cx="24" cy="28" rx="16" ry="14" fill="#F2C94C" stroke="#C99A2E" stroke-width="2"/><path d="M30 16 q6 -4 10 -10" stroke="#5E9068" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="42" cy="6" rx="6" ry="3.4" fill="#6BA377" transform="rotate(30 42 6)"/></svg>
+        <div class="cot-paper-title">Lista de la compra <span class="cot-heart">♡</span></div>
+        <div class="cot-checklist" id="cartList"></div>
+        <svg class="cot-leaf-sprig" viewBox="0 0 50 70"><path d="M25 66 C 25 40, 20 20, 10 4" stroke="#5E9068" stroke-width="2.6" fill="none" stroke-linecap="round"/><ellipse cx="16" cy="14" rx="6" ry="3.4" fill="#6BA377" transform="rotate(-40 16 14)"/><ellipse cx="22" cy="30" rx="6" ry="3.4" fill="#6BA377" transform="rotate(-20 22 30)"/><ellipse cx="24" cy="48" rx="6" ry="3.4" fill="#6BA377" transform="rotate(-8 24 48)"/></svg>
+      </div>
     </div>
-    <div style="padding:0 16px;" id="cartList"></div>
+
+    <button class="cot-add-pill" id="openCartAddBtn">+ &nbsp;Añadir producto</button>
+
+    <svg class="cot-scene2" viewBox="0 0 220 110" preserveAspectRatio="xMidYMax meet">
+      <rect x="0" y="80" width="90" height="30" fill="#EDEDED"/>
+      <g stroke="#CFCFCF" stroke-width="1">
+        <line x1="0" y1="90" x2="90" y2="90"/><line x1="0" y1="100" x2="90" y2="100"/>
+        <line x1="15" y1="80" x2="15" y2="110"/><line x1="35" y1="80" x2="35" y2="110"/>
+        <line x1="55" y1="80" x2="55" y2="110"/><line x1="75" y1="80" x2="75" y2="110"/>
+      </g>
+      <path d="M20 70 Q45 92 70 70 L64 90 Q45 100 26 90 Z" fill="#E39494" stroke="#B96B6B" stroke-width="2"/>
+      <ellipse cx="35" cy="58" rx="16" ry="10" fill="#5E9068"/>
+      <ellipse cx="50" cy="55" rx="12" ry="9" fill="#6BA377"/>
+      <circle cx="40" cy="60" r="8" fill="#C2503D"/>
+      <circle cx="52" cy="63" r="7" fill="#C2503D"/>
+      <rect x="100" y="40" width="18" height="45" rx="4" fill="#D8C24A" stroke="#8A7A2E" stroke-width="2"/>
+      <rect x="106" y="28" width="6" height="14" fill="#8A7A2E"/>
+      <ellipse cx="150" cy="75" rx="14" ry="16" fill="#F3ECDD" stroke="#C9BBA0" stroke-width="2"/>
+      <path d="M150 60 q-2 -8 2 -14" stroke="#C9BBA0" stroke-width="2" fill="none"/>
+    </svg>
   </div>
 
   <!-- MODAL: añadir al carrito (guiado) -->
@@ -565,19 +754,6 @@
       <div class="status-msg" id="newProductStatus"></div>
     </div>
   </div>
-
-  <!-- FAB: añadir ticket -->
-  <div class="fab-wrap" id="fabWrap">
-    <span class="fab-label">Añadir ticket</span>
-    <button class="fab" id="fabAdd">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
-    </button>
-  </div>
-
-  <!-- Botón engranaje: gestionar productos -->
-  <button class="gear-btn" id="gearBtn">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-  </button>
 
   <!-- MODAL: ticket -->
   <div class="overlay" id="ticketOverlay">
@@ -747,8 +923,7 @@ function goTo(view, fromPopstate, data){
   if (view === 'carrito') renderCarrito();
   if (view === 'manage-products') renderManageProducts();
   if (view === 'home') renderHome();
-  document.getElementById('fabWrap').style.display = (view === 'home') ? 'flex' : 'none';
-  document.getElementById('gearBtn').style.display = (view === 'home') ? 'flex' : 'none';
+  // (el gato "Añadir ticket" y el engranaje ahora viven dentro de la propia pantalla de Inicio)
   if (!fromPopstate){
     const state = { view };
     if (view === 'inv-detail') state.category = currentInvCategory;
@@ -793,7 +968,10 @@ document.getElementById('gearBtn').onclick = ()=> goTo('manage-products');
 document.querySelectorAll('[data-go]').forEach(b=> b.onclick = ()=> history.back());
 
 function renderHome(){
-  document.getElementById('carritoSub').textContent = cart.length + ' cosas por comprar';
+  document.getElementById('carritoSub').textContent = cart.length === 0 ? 'Nada pendiente' : (cart.length + (cart.length===1 ? ' cosa por comprar' : ' cosas por comprar'));
+  const h = new Date().getHours();
+  const greeting = h < 12 ? '¡Buenos días! ☀️' : (h < 21 ? '¡Buenas tardes! 🌤️' : '¡Buenas noches! 🌙');
+  document.getElementById('cotGreeting').textContent = greeting;
 }
 
 /* ---------------- storage (Firebase Firestore) ---------------- */
@@ -1597,26 +1775,32 @@ function renderCarrito(){
   const list = document.getElementById('cartList');
   list.innerHTML = '';
   if (cart.length === 0){
-    list.innerHTML = `<div class="empty-mini">Nada pendiente por ahora. Cuando algo se agote, aparecerá aquí solo.</div>`;
+    list.innerHTML = `<div class="cot-empty-note">Nada pendiente por ahora. Cuando algo se agote, aparecerá aquí solo. 🐾</div>`;
     return;
+  }
+  if (cart.length >= 3){
+    const note = document.createElement('div');
+    note.className = 'cot-sticky-note';
+    note.innerHTML = `<div class="cot-note-txt">¡No<br>olvidar!<br>♡</div>`;
+    list.appendChild(note);
   }
   cart.forEach(c=>{
     const row = document.createElement('div');
-    row.className = 'cart-item';
+    row.className = 'cot-check-row';
     const qtyTxt = (c.quantity && c.quantity > 1) ? ` ×${c.quantity}` : '';
     row.innerHTML = `
-      <div class="check"></div>
-      <div class="name">${escapeHtml(c.name)}${qtyTxt}</div>
-      ${c.auto ? '<span class="auto-tag">SIN STOCK</span>' : ''}
-      <button class="icon-btn" data-act="del">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      <button class="cot-checkbox" data-act="check"></button>
+      <div class="cname">${escapeHtml(c.name)}${qtyTxt}</div>
+      ${c.auto ? '<span class="ctag">SIN STOCK</span>' : ''}
+      <button class="cdel" data-act="del">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
       </button>
     `;
     const remove = ()=>{
       cart = cart.filter(x=>x.id!==c.id);
       saveCart(); renderCarrito(); renderHome();
     };
-    row.querySelector('.check').onclick = remove;
+    row.querySelector('[data-act="check"]').onclick = remove;
     row.querySelector('[data-act="del"]').onclick = remove;
     list.appendChild(row);
   });
@@ -1654,6 +1838,7 @@ function openCartAddModal(){
   openOverlay('cartAddOverlay');
 }
 document.getElementById('openCartAddBtn').onclick = openCartAddModal;
+document.getElementById('openCartAddBtnTop').onclick = openCartAddModal;
 
 function selectCartProduct(p){
   cartAddSelected = { name: p.name, category: p.category };
