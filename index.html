@@ -29,7 +29,7 @@
     --danger:#C0392B;
 
     /* paleta "cottage" para Inicio y Carrito */
-    --cot-bg:#F8F1E4;
+    --cot-bg:#FFF6EA;
     --cot-ink:#4A3B2E;
     --cot-ink-soft:#8A7A66;
     --cot-cocinar-bg:#DCE8D3;
@@ -121,18 +121,17 @@
 
   /* ---- HOME: imágenes reales recortadas de la captura de referencia ---- */
   #view-home.active{
-    display:block; background:var(--cot-bg); min-height:100vh; margin:0 -16px -90px;
+    display:block; position:relative; min-height:100vh; margin:0 -16px -90px;
     padding:22px 20px 40px;
+    background:var(--cot-bg) url('img/home/fondo-home.webp') top center / 100% auto no-repeat;
   }
-  .cot-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; }
+  .cot-header{ display:flex; align-items:center; justify-content:flex-start; margin-bottom:2px; }
   .cot-title-img{ height:34px; width:auto; display:block; }
-  .cot-gear{
-    border:none; background:rgba(255,255,255,0.7); width:38px; height:38px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
-    box-shadow:0 1px 4px rgba(74,59,46,0.12); flex-shrink:0; padding:0;
+  .cot-gear-hit{
+    position:absolute; left:61%; top:2.6%; width:13%; height:6.2%; border:none; background:transparent;
+    cursor:pointer; padding:0; z-index:5;
   }
-  .cot-gear img{ width:22px; height:22px; }
-  .cot-gear:active{ transform:scale(0.92); }
+  .cot-gear-hit:active{ transform:scale(0.9); }
   .cot-greeting{ font-family:var(--font-script); font-size:22px; color:var(--cot-ink); margin:2px 0 16px; }
 
   .cot-card-img-wrap{
@@ -151,7 +150,7 @@
   .cot-scene-img{ position:relative; margin-top:22px; line-height:0; }
   .cot-scene-img img{ display:block; width:100%; height:auto; }
   .cot-cat-hit{
-    position:absolute; left:55%; top:22%; width:44%; height:62%; border:none; background:transparent;
+    position:absolute; left:35%; top:11%; width:46%; height:40%; border:none; background:transparent;
     cursor:pointer; padding:0;
   }
   .cot-cat-hit:active{ transform:scale(0.96); }
@@ -453,11 +452,9 @@
 
   <!-- HOME -->
   <div id="view-home" class="view active">
+    <button class="cot-gear-hit" id="gearBtn" aria-label="Ajustes"></button>
     <div class="cot-header">
       <img class="cot-title-img" src="img/home/img-title.webp" alt="La Despensita">
-      <button class="cot-gear" id="gearBtn">
-        <img src="img/home/img-gear.webp" alt="Ajustes" width="26" height="26">
-      </button>
     </div>
     <div class="cot-greeting" id="cotGreeting">¡Buenos días! ☀️</div>
 
